@@ -19,6 +19,7 @@ EOT
   s.files       = `git ls-files`.split( "\n" )
   s.executables = `git ls-files -- bin/*`.split( "\n" ).map{ |f| File.basename( f ) }
 
+  s.required_ruby_version = '>= 1.9.3'
   s.add_runtime_dependency 'sequel', '~> 4.0'
   s.add_development_dependency 'bacon', '~> 1.2'
 end

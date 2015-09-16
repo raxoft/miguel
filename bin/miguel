@@ -1,0 +1,9 @@
+#! /usr/bin/env ruby
+
+$:.unshift File.dirname( __FILE__ ) + '/../lib'
+
+require 'miguel/command'
+
+Miguel::Command.new.run( ARGV )
+
+# EOF #

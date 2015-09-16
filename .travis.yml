@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+  - ruby-head
+  - 2.2.3
+  - 2.1.7
+  - 2.0.0
+  - 1.9.3
+  - rbx-2
+  - jruby-head
+  - jruby-19mode
+gemfile: .travis.gemfile
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+    - rvm: jruby-19mode
+    - rvm: jruby-head

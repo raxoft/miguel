@@ -126,7 +126,7 @@ Miguel::Schema.define do
 
   # User's followers.
 
-  join_table :user_id, :user, :follower_id, :user, :user_followers
+  join_table :user_id, :users, :follower_id, :users, :user_followers
 
 end
 

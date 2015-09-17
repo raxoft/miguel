@@ -1,0 +1,21 @@
+# Example database configuration.
+
+# Development database.
+:development:
+  :adapter: mysql2
+  :user: dev
+  :password: hax0rz
+  :host: localhost
+  :database: test
+  :encoding: utf8
+
+# Production database.
+:production:
+  :adapter: mysql2
+  :user: web
+  :password: aGhiTheig6iex6shieMohz5orsomethinglikethat
+  :host: localhost
+  :database: main
+  :encoding: utf8
+
+# EOF #

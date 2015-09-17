@@ -169,8 +169,10 @@ module Miguel
         config = config[ env ] || config[ env.to_sym ] || config
         config.keys.each{ |k| config[ k.to_sym ] = config.delete( k ) }
         Sequel.connect( config )
-      else
+      elsif name =~ /:\/\//
         Sequel.connect( name )
+      else
+        fail "Database config #{name} not found."
       end
       db.loggers = loggers
       db

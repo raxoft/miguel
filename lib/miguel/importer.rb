@@ -60,11 +60,11 @@ module Miguel
 
       case type
       when /\Avarchar/
-        return :string, :default_size => 255
+        return :String, :default_size => 255
       when /\Achar/
-        return :string, :fixed => true, :default_size => 255
+        return :String, :fixed => true, :default_size => 255
       when /\Atext\z/
-        return :string, :text => true
+        return :String, :text => true
       when /\A(\w+)\([\s\d,]+\)\z/
         return $1.to_sym
       when /\A\w+\z/

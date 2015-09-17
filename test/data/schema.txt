@@ -1,0 +1,100 @@
+table :sequel_types do
+  Integer :a0, :null => false
+  String :a1, :null => false
+  String :a2, :null => false, :size => 50
+  String :a3, :null => false, :fixed => true
+  String :a4, :null => false, :fixed => true, :size => 50
+  String :a5, :null => false, :text => true
+  File :b, :null => false
+  Fixnum :c, :null => false
+  Bignum :d, :null => false
+  Float :e, :null => false
+  BigDecimal :f, :null => false
+  BigDecimal :f2, :null => false, :size => 10
+  BigDecimal :f3, :null => false, :size => [10, 2]
+  Date :g, :null => false
+  DateTime :h, :null => false
+  timestamp :i, :null => false, :default => 0
+  Numeric :j, :null => false
+  TrueClass :k, :null => false
+  FalseClass :l, :null => false
+end
+table :miguel_types do
+  String :string, :null => false
+  String :text, :null => false, :text => true
+  File :blob, :null => false
+  Integer :int, :null => false
+  integer :signed, :null => false, :unsigned => false
+  integer :unsigned, :null => false, :unsigned => true
+  Float :float, :null => false
+  TrueClass :bool, :null => false
+  TrueClass :true, :null => false, :default => true
+  TrueClass :false, :null => false, :default => false
+  timestamp :t, :null => false, :default => 0
+end
+table :timestamps do
+  timestamp :t1, :null => false, :default => 0
+  timestamp :t2, :null => true, :default => nil
+  timestamp :create_time, :null => false, :default => 0
+  timestamp :update_time, :null => false, :default => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+end
+table :users do
+  primary_key :id, :null => false, :unsigned => true, :type => :integer
+  String :name, :null => false
+  index [:name], :null => false, :unique => true
+end
+table :simple do
+  primary_key :id, :null => false, :unsigned => true, :type => :integer
+  integer :user_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  index [:user_id], :null => false
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
+end
+table :reuse do
+  primary_key :user_id, :null => false, :unsigned => true, :type => :integer
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true
+end
+table :compound do
+  integer :a, :null => false, :unsigned => true
+  integer :b, :null => false, :unsigned => true
+  primary_key [:a, :b], :null => false, :unsigned => true
+  String :c, :null => false
+  integer :d, :null => false, :unsigned => false
+  index [:a, :c], :null => false, :unique => true
+  index [:b, :c, :d], :null => false
+  index [:b, :a], :null => false
+  foreign_key [:b, :a], :compound, :null => false, :key => [:a, :b], :unsigned => true
+end
+table :null do
+  String :string, :null => true
+  String :text, :null => true, :text => true
+  File :blob, :null => true
+  Integer :int, :null => true
+  integer :signed, :null => true, :unsigned => false
+  integer :unsigned, :null => true, :unsigned => true
+  Float :float, :null => true
+  TrueClass :bool, :null => true
+  TrueClass :true, :null => true, :default => true
+  TrueClass :false, :null => true, :default => false
+  timestamp :t, :null => true, :default => nil
+  integer :user_id, :null => true, :key => [:id], :unsigned => true, :type => :integer
+  foreign_key [:user_id], :users, :null => true, :key => [:id], :unsigned => true, :type => :integer
+end
+table :simple_users do
+  integer :user_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  integer :simple_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  primary_key [:user_id, :simple_id], :null => false, :unsigned => true
+  index [:simple_id, :user_id], :null => false, :unique => true
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  foreign_key [:simple_id], :simple, :null => false, :key => [:id], :unsigned => true, :type => :integer
+end
+table :self_join do
+  integer :left_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  integer :right_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  primary_key [:left_id, :right_id], :null => false, :unsigned => true
+  timestamp :create_time, :null => false, :default => 0
+  timestamp :update_time, :null => false, :default => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+  index [:right_id, :left_id], :null => false, :unique => true
+  index [:create_time], :null => false
+  foreign_key [:left_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  foreign_key [:right_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
+end

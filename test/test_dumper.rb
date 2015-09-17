@@ -12,7 +12,7 @@ describe Miguel::Dumper do
     d << "d"
     d.text.should == "a\nb\nc\nd\n"
   end
-  
+
   should 'support nesting' do
     d = Miguel::Dumper.new
     d.dump "test" do
@@ -36,7 +36,7 @@ test do
 end
 EOT
   end
-  
+
   should 'support text interpolation' do
     d = Miguel::Dumper.new
     d << "abc"
@@ -44,7 +44,7 @@ EOT
     d.text.should == d.to_s
     d.text.should == "#{d}"
   end
-  
+
   should 'accept nonstring arguments' do
     d = Miguel::Dumper.new
     d << 123
@@ -52,14 +52,14 @@ EOT
     d << :test
     d.text.should == "123\n0.5\ntest\n"
   end
-  
+
   should 'support chaining' do
     d = Miguel::Dumper.new
     d.dump( "x" ).should == d
     ( d << "y" << "z" ).should == d
     d.text.should == "x\ny\nz\n"
   end
-  
+
   should 'support custom buffer' do
     a = []
     d = Miguel::Dumper.new( a )
@@ -68,7 +68,7 @@ EOT
     a.should == [ "xyz\n", "abc\n" ]
     d.text.should == "xyz\nabc\n"
   end
-  
+
   should 'support configurable indentation' do
     d = Miguel::Dumper.new( [], 4 )
     d.dump "a" do
@@ -84,7 +84,7 @@ a do
 end
 EOT
   end
-  
+
 end
 
 # EOF #

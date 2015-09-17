@@ -1,6 +1,6 @@
 # Miguel
 
-[![Gem Version](https://img.shields.io/gem/v/miguel.svg)](http://rubygems.org/gems/miguel) [![Build Status](https://img.shields.io/travis/raxoft/miguel.svg?branch=master)](http://travis-ci.org/raxoft/miguel) [![Dependency Status](https://img.shields.io/gemnasium/raxoft/miguel.svg)](https://gemnasium.com/raxoft/miguel) [![Code Climate](https://img.shields.io/codeclimate/github/raxoft/miguel.svg)](https://codeclimate.com/github/raxoft/miguel) [![Coverage](https://img.shields.io/codeclimate/coverage/github/raxoft/miguel.svg)](https://codeclimate.com/github/raxoft/miguel)
+[![Gem Version](https://img.shields.io/gem/v/miguel.svg)](http://rubygems.org/gems/miguel) [![Build Status](https://travis-ci.org/raxoft/miguel.svg?branch=master)](http://travis-ci.org/raxoft/miguel) [![Dependency Status](https://img.shields.io/gemnasium/raxoft/miguel.svg)](https://gemnasium.com/raxoft/miguel) [![Code Climate](https://img.shields.io/codeclimate/github/raxoft/miguel.svg)](https://codeclimate.com/github/raxoft/miguel) [![Coverage](https://img.shields.io/codeclimate/coverage/github/raxoft/miguel.svg)](https://codeclimate.com/github/raxoft/miguel) [![Donate](https://img.shields.io/badge/support-donate-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=paypal%40raxoft%2ecz&item_name=Miguel%20%2d%20Database%20migration%20tool&no_shipping=1&return=https%3a%2f%2fgithub%2ecom%2fraxoft%2fmiguel&cancel_return=https%3a%2f%2fgithub%2ecom%2fraxoft%2fmiguel&cn=Optional%20Feedback&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8)
 
 Miguel is a tool for sane management of database schemas. It aims to help with these goals:
 
@@ -110,21 +110,21 @@ See documentation of the `set_defaults` method for details.
 The preset defaults are like this:
 
 ``` ruby
-set_defaults :global, :null => false
-set_defaults :primary_key, :type => :integer, :unsigned => true
-set_defaults :foreign_key, :key => :id, :type => :integer, :unsigned => true
-set_defaults :unique, :index, :unique => true
+set_defaults :global, null: false
+set_defaults :primary_key, type: :integer, unsigned: true
+set_defaults :foreign_key, key: :id, type: :integer, unsigned: true
+set_defaults :unique, :index, unique: true
 set_defaults :Bool, :TrueClass
-set_defaults :True, :TrueClass, :default => true
-set_defaults :False, :TrueClass, :default => false
-set_defaults :Signed, :integer, :unsigned => false
-set_defaults :Unsigned, :integer, :unsigned => true
-set_defaults :Text, :String, :text => true
-set_defaults :Time, :timestamp, :default => 0
-set_defaults :Time?, :timestamp, :default => nil
+set_defaults :True, :TrueClass, default: true
+set_defaults :False, :TrueClass, default: false
+set_defaults :Signed, :integer, unsigned: false
+set_defaults :Unsigned, :integer, unsigned: true
+set_defaults :Text, :String, text: true
+set_defaults :Time, :timestamp, default: 0
+set_defaults :Time?, :timestamp, default: nil
 ```
 
-Finally, the `timestamp` helper can be used to create the
+Finally, the `timestamps` helper can be used to create the
 `create_time` and `update_time` timestamps for you.
 
 ## Using the command
@@ -149,6 +149,7 @@ Databases can be specified either by their Sequel URL like
 or by the common database `.yml` config file:
 
 ``` yaml
+# Example db.yml.
 adapter: mysql2
 user: jim
 password: sup3rsecr3t
@@ -179,9 +180,9 @@ leaving dozens of piecewise migration files finally behind.
 The type support is geared towards the MySQL, especially the timestamp types.
 Generic types should work with any database, but your mileage may vary.
 
-It is currently not possible to describe renaming of columns.
+It is currently not possible to describe renaming of columns or tables.
 If you need that,
-simply rename the columns directly in the database or by using standard Sequel migration,
+simply rename them directly in the database or by using standard Sequel migration,
 and adjust the schema description accordingly.
 
 ## Credits

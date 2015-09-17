@@ -17,9 +17,9 @@ module Miguel
       def out_value( value )
         case value
         when Hash
-          "{" << ( value.map{ |k,v| "#{out_value( k )} => #{out_value( v )}" }.join( ', ' ) ) << "}"
+          "{#{ value.map{ |k,v| "#{out_value( k )} => #{out_value( v )}" }.join( ', ' ) }}"
         when Array
-          "[" << ( value.map{ |v| out_value( v ) }.join( ', ' ) ) << "]"
+          "[#{ value.map{ |v| out_value( v ) }.join( ', ' ) }]"
         when Sequel::LiteralString
           "Sequel.lit(#{value.to_s.inspect})"
         else

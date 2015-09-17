@@ -131,6 +131,15 @@ module Miguel
         CANONIC_TYPES[ t ] || t
       end
 
+      # Convert given size into its canonic form.
+      def canonic_size( size )
+        if canonic_type == :decimal && size.is_a?( Integer )
+          [ size, 0 ]
+        else
+          size
+        end
+      end
+
       # Default options implied for certain types.
       DEFAULT_OPTS = {
         :string => { :size => 255 },
@@ -149,6 +158,7 @@ module Miguel
         o = { :type => canonic_type, :default => default }
         o.merge!( DEFAULT_OPTS[ canonic_type ] || {} )
         o.merge!( opts )
+        o[ :size ] = canonic_size( o[ :size ] )
         o.delete_if{ |key, value| IGNORED_OPTS.include? key }
       end
 

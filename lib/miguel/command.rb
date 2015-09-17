@@ -163,11 +163,7 @@ module Miguel
       db = if name.nil? or name.empty?
         fail "Missing database name."
       elsif File.exist?( name )
-        require 'yaml'
-        config = YAML.load_file( name )
-        env = self.env || "development"
-        config = config[ env ] || config[ env.to_sym ] || config
-        config.keys.each{ |k| config[ k.to_sym ] = config.delete( k ) }
+        config = load_db_config( name )
         Sequel.connect( config )
       elsif name =~ /:\/\//
         Sequel.connect( name )
@@ -176,6 +172,16 @@ module Miguel
       end
       db.loggers = loggers
       db
+    end
+
+    # Load database config from given file.
+    def load_db_config( name )
+      require 'yaml'
+      config = YAML.load_file( name )
+      env = self.env || "development"
+      config = config[ env ] || config[ env.to_sym ] || config
+      config.keys.each{ |k| config[ k.to_sym ] = config.delete( k ) }
+      config
     end
 
     # Show changes between the two schemas.

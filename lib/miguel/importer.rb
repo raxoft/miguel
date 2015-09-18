@@ -17,7 +17,7 @@ module Miguel
 
     private
 
-    # Which characrets we convert when parsing enum values.
+    # Which characters we convert when parsing enum values.
     # Quite likely not exhaustive, but sufficient for our purposes.
     ESCAPED_CHARS = {
       "''" => "'",
@@ -56,6 +56,11 @@ module Miguel
         when /\A(enum|set)\((.*)\)\z/
           return $1.to_sym, :elements => parse_elements( $2 )
         end
+      when :sqlite
+        case type
+        when /\Ainteger UNSIGNED\z/
+          return :integer, :unsigned => true
+        end
       end
 
       case type
@@ -68,7 +73,7 @@ module Miguel
       when /\A(\w+)\([\s\d,]+\)\z/
         return $1.to_sym
       when /\A\w+\z/
-        return type
+        return type.to_sym
       end
 
       ruby_type

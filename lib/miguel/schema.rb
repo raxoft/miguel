@@ -146,6 +146,7 @@ module Miguel
         :bigint => { :size => 20 },
         :decimal => { :size => [ 10, 0 ] },
         :integer => { :unsigned => false },
+        :primary_key => { :unsigned => false, :type => :integer },
       }
 
       # Options which are ignored for columns.
@@ -239,7 +240,9 @@ module Miguel
 
       # Get the foreign key options, in a canonic way.
       def canonic_opts
-        opts.reject{ |key, value| IGNORED_OPTS.include? key }
+        o = { :on_update => :no_action, :on_delete => :no_action }
+        o.merge!( opts )
+        o.delete_if{ |key, value| IGNORED_OPTS.include? key }
       end
 
       # Compare one foreign key with another one.

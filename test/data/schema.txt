@@ -36,33 +36,33 @@ table :timestamps do
   timestamp :t1, :null => false, :default => 0
   timestamp :t2, :null => true, :default => nil
   timestamp :create_time, :null => false, :default => 0
-  timestamp :update_time, :null => false, :default => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+  timestamp :update_time, :null => false, :default => 0
 end
 table :users do
-  primary_key :id, :null => false, :unsigned => true, :type => :integer
+  primary_key :id, :null => false, :unsigned => false, :type => :integer
   String :name, :null => false
   index [:name], :null => false, :unique => true
 end
 table :simple do
-  primary_key :id, :null => false, :unsigned => true, :type => :integer
-  integer :user_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  primary_key :id, :null => false, :unsigned => false, :type => :integer
+  integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
   index [:user_id], :null => false
-  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
 end
 table :reuse do
-  primary_key :user_id, :null => false, :unsigned => true, :type => :integer
-  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true
+  primary_key :user_id, :null => false, :unsigned => false, :type => :integer
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false
 end
 table :compound do
   integer :a, :null => false, :unsigned => true
   integer :b, :null => false, :unsigned => true
-  primary_key [:a, :b], :null => false, :unsigned => true
+  primary_key [:a, :b], :null => false, :unsigned => false
   String :c, :null => false
   integer :d, :null => false, :unsigned => false
   index [:a, :c], :null => false, :unique => true
   index [:b, :c, :d], :null => false
   index [:b, :a], :null => false
-  foreign_key [:b, :a], :compound, :null => false, :key => [:a, :b], :unsigned => true
+  foreign_key [:b, :a], :compound, :null => false, :key => [:a, :b], :unsigned => false
 end
 table :null do
   String :string, :null => true
@@ -76,25 +76,25 @@ table :null do
   TrueClass :true, :null => true, :default => true
   TrueClass :false, :null => true, :default => false
   timestamp :t, :null => true, :default => nil
-  integer :user_id, :null => true, :key => [:id], :unsigned => true, :type => :integer
-  foreign_key [:user_id], :users, :null => true, :key => [:id], :unsigned => true, :type => :integer
+  integer :user_id, :null => true, :key => [:id], :unsigned => false, :type => :integer
+  foreign_key [:user_id], :users, :null => true, :key => [:id], :unsigned => false, :type => :integer
 end
 table :simple_users do
-  integer :user_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
-  integer :simple_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
-  primary_key [:user_id, :simple_id], :null => false, :unsigned => true
+  integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  integer :simple_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  primary_key [:user_id, :simple_id], :null => false, :unsigned => false
   index [:simple_id, :user_id], :null => false, :unique => true
-  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
-  foreign_key [:simple_id], :simple, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  foreign_key [:simple_id], :simple, :null => false, :key => [:id], :unsigned => false, :type => :integer
 end
 table :self_join do
-  integer :left_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
-  integer :right_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
-  primary_key [:left_id, :right_id], :null => false, :unsigned => true
+  integer :left_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  integer :right_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  primary_key [:left_id, :right_id], :null => false, :unsigned => false
   timestamp :create_time, :null => false, :default => 0
-  timestamp :update_time, :null => false, :default => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+  timestamp :update_time, :null => false, :default => 0
   index [:right_id, :left_id], :null => false, :unique => true
   index [:create_time], :null => false
-  foreign_key [:left_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
-  foreign_key [:right_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
+  foreign_key [:left_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  foreign_key [:right_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
 end

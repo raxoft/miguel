@@ -284,15 +284,21 @@ module Miguel
 
         # Create the default timestamp fields.
         def timestamps
-          # Unfortunately, MySQL allows only either automatic create timestamp
-          # (DEFAULT CURRENT_TIMESTAMP) or automatic update timestamp (DEFAULT
-          # CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP), but not both - one
-          # has to be updated manually anyway. So we choose to have the update timestamp
-          # automatically updated, and let the create one to be set manually.
-          # Also, Sequel doesn't currently honor :on_update for column definitions,
-          # so we have to use default literal to make it work. Sigh.
-          timestamp :create_time, :null => false, :default => 0
-          timestamp :update_time, :null => false, :default => Sequel.lit( 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' )
+          opts = @table.schema.opts
+          if opts[ :mysql_timestamps ]
+            # Unfortunately, MySQL allows only either automatic create timestamp
+            # (DEFAULT CURRENT_TIMESTAMP) or automatic update timestamp (DEFAULT
+            # CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP), but not both - one
+            # has to be updated manually anyway. So we choose to have the update timestamp
+            # automatically updated, and let the create one to be set manually.
+            # Also, Sequel doesn't currently honor :on_update for column definitions,
+            # so we have to use default literal to make it work. Sigh.
+            timestamp :create_time, :null => false, :default => 0
+            timestamp :update_time, :null => false, :default => Sequel.lit( 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' )
+          else
+            Time :create_time
+            Time :update_time
+          end
         end
       end
 
@@ -383,12 +389,16 @@ module Miguel
 
     end
 
+    # Schema options.
+    attr_reader :opts
+
     # Create new schema.
-    def initialize
+    def initialize( opts = {} )
       @tables = {}
       @aliases = {}
       @defaults = {}
       @callbacks = {}
+      @opts = self.class.default_options.merge(opts)
     end
 
     # Get all tables.
@@ -462,6 +472,15 @@ module Miguel
       @defaults[ name ] = args.pop if args.last.is_a? Hash
       @callbacks[ name ] = block
       fail( ArgumentError, "invalid defaults for #{name}" ) unless args.empty?
+      self
+    end
+
+    # Clear defaults and aliases for given statement.
+    def clear_defaults( name )
+      @aliases.delete( name )
+      @defaults.delete( name )
+      @callbacks.delete( name )
+      self
     end
 
     # Get default options for given statement.
@@ -474,9 +493,7 @@ module Miguel
     # The current set of defaults is as follows:
     #
     #   :global, :null => false
-    #   :primary_key, :type => :integer, :unsigned => true
-    #   :foreign_key, :key => :id, :type => :integer, :unsigned => true
-    #   :unique, :index, :unique => true
+    #
     #   :Bool, :TrueClass
     #   :True, :TrueClass, :default => true
     #   :False, :TrueClass, :default => false
@@ -485,20 +502,32 @@ module Miguel
     #   :Text, :String, :text => true
     #   :Time, :timestamp, :default => 0
     #   :Time?, :timestamp, :default => nil
-    def set_standard_defaults
+    #
+    #   :unique, :index, :unique => true
+    #
+    #   :primary_key, :type => :integer, :unsigned => false
+    #   :foreign_key, :key => :id, :type => :integer, :unsigned => false
+    #
+    # If the +unsigned_keys+ option is set to true, the keys
+    # are set up to use unsigned integers instead.
+    def set_standard_defaults( opts = self.opts )
 
       # We set NOT NULL on everything by default, but note the ?
       # syntax (like Text?) which declares the column as NULL.
-      # We also like our keys unsigned, so we make that a default, too.
+
+      set_defaults :global, :null => false
+
+      # We also like our keys unsigned, so we allow setting that, too.
       # Unfortunately, :unsigned currently works only with :integer,
       # not the default :Integer, and :integer can't be specified for compound keys,
       # so we have to use the callback to set the type only at correct times.
 
-      set_defaults :global, :null => false
-      set_defaults :primary_key, :unsigned => true do |opts,args,table|
+      unsigned_keys = !! opts[ :unsigned_keys ]
+
+      set_defaults :primary_key, :unsigned => unsigned_keys do |opts,args,table|
         opts[ :type ] ||= :integer unless args.first.is_a? Array
       end
-      set_defaults :foreign_key, :key => :id, :unsigned => true do |opts,args,table|
+      set_defaults :foreign_key, :key => :id, :unsigned => unsigned_keys do |opts,args,table|
         opts[ :type ] ||= :integer unless args.first.is_a? Array
       end
 
@@ -561,7 +590,7 @@ module Miguel
     end
 
     # Define schema with the provided block.
-    def define( opts = {}, &block )
+    def define( &block )
       fail( ArgumentError, "missing schema block" ) unless block
       set_standard_defaults unless opts[ :use_defaults ] == false
       instance_eval &block
@@ -570,20 +599,67 @@ module Miguel
 
     class << self
 
-      # The most recent schema defined by Schema.define.
-      attr_reader :schema
+      # Mutex protecting access to thread sensitive variables.
+      LOCK = Mutex.new
+
+      # Get default schema options.
+      def default_options
+        sync{ @opts || {} }
+      end
+
+      # Set default schema options.
+      def default_options=( opts )
+        sync{ @opts = opts.nil? ? nil : opts.dup }
+      end
+      alias set_default_options default_options=
 
       # Define schema with provided block.
       def define( opts = {}, &block )
-        @schema = new.define( opts, &block )
+        set_schema( new( opts ).define( &block ) )
       end
 
       # Load schema from given file.
-      def load( name )
-        @schema = nil
+      def load( name, opts = {} )
         name = File.expand_path( name )
-        Kernel.load( name )
+        sync do
+          get_schema do
+            with_options( opts ) do
+              Kernel.load( name )
+            end
+          end
+        end
+      end
+
+      private
+
+      # Serialize access to thread sensitive variables.
+      def sync( &block )
+        LOCK.synchronize &block
+      rescue ThreadError
+        yield
+      end
+
+      # Store given schema for later if requested.
+      def set_schema( schema )
+        sync{ @schema = schema if @schema == self }
         schema
+      end
+
+      # Execute given block and return stored schema.
+      def get_schema
+        @schema = self
+        yield
+        @schema unless @schema == self
+      ensure
+        @schema = nil
+      end
+
+      # Execute block with given options.
+      def with_options( opts )
+        saved, @opts = @opts, default_options.merge(opts)
+        yield
+      ensure
+        @opts = saved
       end
 
     end

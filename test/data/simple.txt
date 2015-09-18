@@ -1,0 +1,10 @@
+table :items do
+  primary_key :id, :null => false, :unsigned => false, :type => :integer
+  String :name, :null => false
+  integer :parent_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  timestamp :create_time, :null => false, :default => 0
+  timestamp :update_time, :null => false, :default => 0
+  index [:name], :null => false, :unique => true
+  index [:parent_id], :null => false
+  foreign_key [:parent_id], :items, :null => false, :key => [:id], :unsigned => false, :type => :integer
+end

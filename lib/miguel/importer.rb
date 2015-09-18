@@ -103,6 +103,28 @@ module Miguel
       [ type, opts ]
     end
 
+    # Types we support for default values. Anything else is converted to String.
+    DEFAULT_TYPES = [ String, Numeric, TrueClass, FalseClass ]
+
+    # Convert given database default of given type to default used by our schema definitions.
+    def revert_default( type, default, ruby_default )
+      default = ruby_default unless ruby_default.nil?
+      return if default.nil?
+
+      default = default.to_s unless DEFAULT_TYPES.any?{ |x| default.is_a?( x ) }
+
+      if type.to_s =~ /date|time/
+        case default
+        when /\A'([-: \d]+)'\z/
+          default = $1
+        when 'CURRENT_TIMESTAMP'
+          # This matches our use of MySQL timestamps in schema definitions.
+          default = Sequel.lit('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+        end
+      end
+      default
+    end
+
     # Import indexes of given table.
     def import_indexes( table )
       # Foreign keys also automatically create indexes, which we must exclude when importing.
@@ -126,12 +148,6 @@ module Miguel
         table.add_foreign_key( columns, table_name, opts )
       end
     end
-
-    # Our custom mapping of some database defaults into the values we use in our schemas.
-    DEFAULT_CONSTANTS = {
-      "0000-00-00 00:00:00" => 0,
-      "CURRENT_TIMESTAMP" => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
-    }
 
     # Options which are ignored for columns.
     # These are usually just schema hints which the user normally doesn't specify.
@@ -174,11 +190,9 @@ module Miguel
         default = opts.delete( :default )
         ruby_default = opts.delete( :ruby_default )
 
-        default = DEFAULT_CONSTANTS[ default ] || ( ruby_default.nil? ? default : ruby_default )
+        default = revert_default( type, default, ruby_default )
 
-        unless default.nil?
-          opts[ :default ] = default
-        end
+        opts[ :default ] = default unless default.nil?
 
         # Deal with primary keys, which is a bit obscure because of the auto-increment handling.
 

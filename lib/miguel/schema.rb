@@ -296,7 +296,7 @@ module Miguel
             # automatically updated, and let the create one to be set manually.
             # Also, Sequel doesn't currently honor :on_update for column definitions,
             # so we have to use default literal to make it work. Sigh.
-            timestamp :create_time, :null => false, :default => 0
+            timestamp :create_time, :null => false, :default => '0000-00-00 00:00:00'
             timestamp :update_time, :null => false, :default => Sequel.lit( 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' )
           else
             Time :create_time
@@ -503,7 +503,7 @@ module Miguel
     #   :Signed, :integer, :unsigned => false
     #   :Unsigned, :integer, :unsigned => true
     #   :Text, :String, :text => true
-    #   :Time, :timestamp, :default => 0
+    #   :Time, :timestamp, :default => '0000-00-00 00:00:00'
     #   :Time?, :timestamp, :default => nil
     #
     #   :unique, :index, :unique => true
@@ -553,7 +553,7 @@ module Miguel
       # we have to be careful to turn off the MySQL autoupdate behavior.
       # That's why we have to set defaults explicitly.
 
-      set_defaults :Time, :timestamp, :default => 0
+      set_defaults :Time, :timestamp, :default => '0000-00-00 00:00:00'
       set_defaults :Time?, :timestamp, :default => nil
 
       self

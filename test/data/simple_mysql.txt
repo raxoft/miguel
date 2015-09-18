@@ -2,7 +2,7 @@ table :items do
   primary_key :id, :null => false, :unsigned => true, :type => :integer
   String :name, :null => false
   integer :parent_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
-  timestamp :create_time, :null => false, :default => 0
+  timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
   timestamp :update_time, :null => false, :default => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
   index [:name], :null => false, :unique => true
   index [:parent_id], :null => false

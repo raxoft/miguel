@@ -10,7 +10,7 @@ Miguel is a tool for sane management of database schemas. It aims to help with t
 
 To achieve this, it provides the following features:
 
-* [Sequel](http://sequel.jeremyevans.net/)-like DSL for schema description with some enhancements.
+* [Sequel][]-like DSL for schema description with some enhancements.
 * Load schema from given description file or from given database.
 * Show changes necessary to turn one schema into another.
 * Render those changes as Sequel's change or up/down migrations.
@@ -111,21 +111,29 @@ The preset defaults are like this:
 
 ``` ruby
 set_defaults :global, null: false
-set_defaults :primary_key, type: :integer, unsigned: true
-set_defaults :foreign_key, key: :id, type: :integer, unsigned: true
-set_defaults :unique, :index, unique: true
+
 set_defaults :Bool, :TrueClass
 set_defaults :True, :TrueClass, default: true
 set_defaults :False, :TrueClass, default: false
 set_defaults :Signed, :integer, unsigned: false
 set_defaults :Unsigned, :integer, unsigned: true
 set_defaults :Text, :String, text: true
-set_defaults :Time, :timestamp, default: 0
+set_defaults :Time, :timestamp, default: '0000-00-00 00:00:00'
 set_defaults :Time?, :timestamp, default: nil
+
+set_defaults :unique, :index, unique: true
+
+set_defaults :primary_key, type: :integer, unsigned: false
+set_defaults :foreign_key, key: :id, type: :integer, unsigned: false
 ```
+
+If you prefer unsigned keys instead and your database engine supports it,
+you can pass the `unsigned_keys: true` option to `define` to make it happen.
 
 Finally, the `timestamps` helper can be used to create the
 `create_time` and `update_time` timestamps for you.
+If you pass the `mysql_timestamps: true` option to `define`,
+the `update_time` timestamp will have the MySQL auto-update feature enabled.
 
 ## Using the command
 
@@ -145,6 +153,8 @@ the command will always ask for a confirmation before changing anything in the d
 (unless you use the `--force` option).
 
 Databases can be specified either by their Sequel URL like
+`sqlite://test.db`
+or
 `mysql2://user:password@localhost/main`,
 or by the common database `.yml` config file:
 
@@ -177,8 +187,11 @@ leaving dozens of piecewise migration files finally behind.
 
 ## Limitations
 
-The type support is geared towards the MySQL, especially the timestamp types.
+The database specific type support is geared towards [MySQL][] and [SQLite][].
 Generic types should work with any database, but your mileage may vary.
+
+Changing the type of primary keys can be as problematic as with normal Sequel migrations,
+so it's best to set them once and stick with them.
 
 It is currently not possible to describe renaming of columns or tables.
 If you need that,
@@ -190,3 +203,7 @@ and adjust the schema description accordingly.
 Copyright &copy; 2015 Patrik Rak
 
 Miguel is released under the MIT license.
+
+[Sequel]: http://sequel.jeremyevans.net/
+[MySQL]: https://www.mysql.com/
+[SQLite]: https://www.sqlite.org/

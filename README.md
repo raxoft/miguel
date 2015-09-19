@@ -129,6 +129,8 @@ set_defaults :foreign_key, key: :id, type: :integer, unsigned: false
 
 If you prefer unsigned keys instead and your database engine supports it,
 you can pass the `unsigned_keys: true` option to `define` to make it happen.
+If you don't want any of these defaults set up for you,
+pass the `use_defaults: false` option to define instead.
 
 Finally, the `timestamps` helper can be used to create the
 `create_time` and `update_time` timestamps for you.
@@ -190,7 +192,7 @@ leaving dozens of piecewise migration files finally behind.
 The database specific type support is geared towards [MySQL][] and [SQLite][].
 Generic types should work with any database, but your mileage may vary.
 
-Changing the type of primary keys can be as problematic as with normal Sequel migrations,
+Changing primary keys can be as problematic as with normal Sequel migrations,
 so it's best to set them once and stick with them.
 
 It is currently not possible to describe renaming of columns or tables.

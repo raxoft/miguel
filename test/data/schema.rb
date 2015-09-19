@@ -1,6 +1,6 @@
 # Test schema.
 
-Miguel::Schema.define do
+Miguel::Schema.define( use_defaults: false ) do
 
   table :sequel_types do
     Integer :a0                         # integer
@@ -17,12 +17,16 @@ Miguel::Schema.define do
     BigDecimal :f2, :size=>10           # numeric(10)
     BigDecimal :f3, :size=>[10, 2]      # numeric(10, 2)
     Date :g                             # date
-    DateTime :h                         # timestamp
-    Time :i                             # timestamp
+    #DateTime :h                        # timestamp or datetime
+    #Time :i                            # timestamp or datetime
+    Time :i2, :only_time=>true          # time
     Numeric :j                          # numeric
     TrueClass :k                        # boolean
     FalseClass :l                       # boolean
   end
+
+  set_standard_defaults
+  set_defaults :Custom, :String, fixed: true, size: 3
 
   table :miguel_types do
     String :string
@@ -35,7 +39,15 @@ Miguel::Schema.define do
     Bool :bool
     True :true
     False :false
-    Time :t
+    Time :time
+    Custom :custom
+  end
+
+  table :native_types do
+    date :date, default: '2000-12-31'
+    time :time, default: '23:59:59'
+    datetime :datetime, default: '2037-12-31 23:59:59'
+    timestamp :timestamp, default: '1970-01-02 00:00:00'
   end
 
   table :timestamps do
@@ -86,6 +98,16 @@ Miguel::Schema.define do
     False? :false
     Time? :t
     foreign_key? :user_id, :users
+  end
+
+  table :defaults do
+    String :string, default: 'abc'
+    Integer :int, default: 10
+    Signed :signed, default: -1
+    Unsigned :unsigned, default: 1000
+    Float :float, default: 3.14
+    Bool :bool, default: true
+    Time :time, default: '2037-12-31 23:59:59'
   end
 
   join_table :user_id, :users, :simple_id, :simple

@@ -126,7 +126,7 @@ module Miguel
       if from.allow_null != to.allow_null && to.allow_null
         out << "set_column_allow_null #{to.out_name}"
       end
-      if from.type_opts != to.type_opts
+      if from.canonic_type != to.canonic_type || from.type_opts != to.type_opts
         out << "set_column_type #{to.out_name}, #{to.out_type}#{to.out_opts}"
       end
       if from.default != to.default

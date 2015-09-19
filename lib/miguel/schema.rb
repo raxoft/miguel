@@ -9,6 +9,9 @@ module Miguel
   # Class for defining database schema.
   class Schema
 
+    # String denoting zero time.
+    ZERO_TIME = '0000-00-00 00:00:00'.freeze
+
     # Module for pretty printing of names, types, and especially options.
     module Output
 
@@ -146,6 +149,7 @@ module Miguel
         :bigint => { :size => 20 },
         :decimal => { :size => [ 10, 0 ] },
         :integer => { :unsigned => false },
+        :time => { :only_time => true },
         :primary_key => { :unsigned => false, :type => :integer },
       }
 
@@ -156,7 +160,7 @@ module Miguel
       # Get the column options in a canonic way.
       def canonic_opts
         return {} if type == :primary_key && name.is_a?( Array )
-        o = { :type => canonic_type, :default => default }
+        o = { :type => canonic_type, :default => default, :null => true }
         o.merge!( DEFAULT_OPTS[ canonic_type ] || {} )
         o.merge!( opts )
         o[ :size ] = canonic_size( o[ :size ] )
@@ -296,7 +300,7 @@ module Miguel
             # automatically updated, and let the create one to be set manually.
             # Also, Sequel doesn't currently honor :on_update for column definitions,
             # so we have to use default literal to make it work. Sigh.
-            timestamp :create_time, :null => false, :default => '0000-00-00 00:00:00'
+            timestamp :create_time, :null => false, :default => ZERO_TIME
             timestamp :update_time, :null => false, :default => Sequel.lit( 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' )
           else
             Time :create_time
@@ -553,7 +557,7 @@ module Miguel
       # we have to be careful to turn off the MySQL autoupdate behavior.
       # That's why we have to set defaults explicitly.
 
-      set_defaults :Time, :timestamp, :default => '0000-00-00 00:00:00'
+      set_defaults :Time, :timestamp, :default => ZERO_TIME
       set_defaults :Time?, :timestamp, :default => nil
 
       self

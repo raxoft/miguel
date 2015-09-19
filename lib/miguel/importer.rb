@@ -103,15 +103,18 @@ module Miguel
       [ type, opts ]
     end
 
-    # Types we support for default values. Anything else is converted to String.
-    DEFAULT_TYPES = [ String, Numeric, TrueClass, FalseClass ]
-
     # Convert given database default of given type to default used by our schema definitions.
     def revert_default( type, default, ruby_default )
       default = ruby_default unless ruby_default.nil?
       return if default.nil?
 
-      default = default.to_s unless DEFAULT_TYPES.any?{ |x| default.is_a?( x ) }
+      case default
+      when String, Numeric, TrueClass, FalseClass
+      when DateTime
+        default = default.strftime( '%F %T' )
+      else
+        default = default.to_s
+      end
 
       if type.to_s =~ /date|time/
         case default

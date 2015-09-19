@@ -1,23 +1,22 @@
 table :sequel_types do
-  Integer :a0, :null => false
-  String :a1, :null => false
-  String :a2, :null => false, :size => 50
-  String :a3, :null => false, :fixed => true
-  String :a4, :null => false, :fixed => true, :size => 50
-  String :a5, :null => false, :text => true
-  File :b, :null => false
-  Fixnum :c, :null => false
-  Bignum :d, :null => false
-  Float :e, :null => false
-  BigDecimal :f, :null => false
-  BigDecimal :f2, :null => false, :size => 10
-  BigDecimal :f3, :null => false, :size => [10, 2]
-  Date :g, :null => false
-  DateTime :h, :null => false
-  timestamp :i, :null => false, :default => "0000-00-00 00:00:00"
-  Numeric :j, :null => false
-  TrueClass :k, :null => false
-  FalseClass :l, :null => false
+  Integer :a0
+  String :a1
+  String :a2, :size => 50
+  String :a3, :fixed => true
+  String :a4, :fixed => true, :size => 50
+  String :a5, :text => true
+  File :b
+  Fixnum :c
+  Bignum :d
+  Float :e
+  BigDecimal :f
+  BigDecimal :f2, :size => 10
+  BigDecimal :f3, :size => [10, 2]
+  Date :g
+  Time :i2, :only_time => true
+  Numeric :j
+  TrueClass :k
+  FalseClass :l
 end
 table :miguel_types do
   String :string, :null => false
@@ -30,7 +29,14 @@ table :miguel_types do
   TrueClass :bool, :null => false
   TrueClass :true, :null => false, :default => true
   TrueClass :false, :null => false, :default => false
-  timestamp :t, :null => false, :default => "0000-00-00 00:00:00"
+  timestamp :time, :null => false, :default => "0000-00-00 00:00:00"
+  String :custom, :null => false, :fixed => true, :size => 3
+end
+table :native_types do
+  date :date, :null => false, :default => "2000-12-31"
+  time :time, :null => false, :default => "23:59:59"
+  datetime :datetime, :null => false, :default => "2037-12-31 23:59:59"
+  timestamp :timestamp, :null => false, :default => "1970-01-02 00:00:00"
 end
 table :timestamps do
   timestamp :t1, :null => false, :default => "0000-00-00 00:00:00"
@@ -78,6 +84,15 @@ table :null do
   timestamp :t, :null => true, :default => nil
   integer :user_id, :null => true, :key => [:id], :unsigned => false, :type => :integer
   foreign_key [:user_id], :users, :null => true, :key => [:id], :unsigned => false, :type => :integer
+end
+table :defaults do
+  String :string, :null => false, :default => "abc"
+  Integer :int, :null => false, :default => 10
+  integer :signed, :null => false, :unsigned => false, :default => -1
+  integer :unsigned, :null => false, :unsigned => true, :default => 1000
+  Float :float, :null => false, :default => 3.14
+  TrueClass :bool, :null => false, :default => true
+  timestamp :time, :null => false, :default => "2037-12-31 23:59:59"
 end
 table :simple_users do
   integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer

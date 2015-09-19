@@ -21,6 +21,14 @@ module Miguel
       ]
     end
 
+    # Iterate over matching pairs of named items.
+    def each_pair( name, from_items, to_items )
+      for from, to in from_items.zip( to_items )
+        fail "invalid #{name} pair #{from.name} -> #{to.name}" unless from.name == to.name
+        yield from, to
+      end
+    end
+
     # Convert foreign keys from given tables into [ table name, foreign key ] pairs for easier comparison.
     def prepare_keys( tables )
       result = []
@@ -41,25 +49,26 @@ module Miguel
       result
     end
 
-    # Generate code for adding given foreign keys.
-    def dump_add_foreign_keys( out, table_keys )
+    # Generate code for altering given foreign keys.
+    def dump_foreign_keys( out, table_keys, &block )
       for name, keys in split_keys( table_keys )
         out.dump "alter_table #{name.inspect}" do
-          for key in keys
-            out << "add_foreign_key #{key.out_columns}, #{key.out_table_name}#{key.out_canonic_opts}"
-          end
+          keys.each &block
         end
+      end
+    end
+
+    # Generate code for adding given foreign keys.
+    def dump_add_foreign_keys( out, table_keys )
+      dump_foreign_keys( out, table_keys ) do |key|
+        out << "add_foreign_key #{key.out_columns}, #{key.out_table_name}#{key.out_canonic_opts}"
       end
     end
 
     # Generate code for dropping given foreign keys.
     def dump_drop_foreign_keys( out, table_keys )
-      for name, keys in split_keys( table_keys )
-        out.dump "alter_table #{name.inspect}" do
-          for key in keys
-            out << "drop_foreign_key #{key.out_columns} # #{key.out_table_name}#{key.out_canonic_opts}"
-          end
-        end
+      dump_foreign_keys( out, table_keys ) do |key|
+        out << "drop_foreign_key #{key.out_columns} # #{key.out_table_name}#{key.out_canonic_opts}"
       end
     end
 
@@ -139,9 +148,7 @@ module Miguel
 
     # Generate code for altering given columns.
     def dump_alter_columns( out, from_columns, to_columns )
-      pairs = from_columns.zip( to_columns )
-      for from, to in pairs
-        fail "invalid column pair #{from.name} -> #{to.name}" unless from.name == to.name
+      each_pair( :column, from_columns, to_columns ) do |from, to|
         dump_alter_column( out, from, to )
       end
     end
@@ -176,9 +183,7 @@ module Miguel
 
     # Generate code for altering given tables.
     def dump_alter_tables( out, from_tables, to_tables )
-      pairs = from_tables.zip( to_tables )
-      for from, to in pairs
-        fail "invalid table pair #{from.name} -> #{to.name}" unless from.name == to.name
+      each_pair( :table, from_tables, to_tables ) do |from, to|
         dump_alter_table( out, from, to )
       end
     end

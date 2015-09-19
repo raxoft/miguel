@@ -18,4 +18,8 @@ platforms :jruby do
   gem 'jdbc-postgres'
 end
 
+if ENV[ 'CODECLIMATE_REPO_TOKEN' ]
+  gem 'codeclimate-test-reporter'
+end
+
 # EOF #

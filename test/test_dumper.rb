@@ -1,5 +1,6 @@
 # Test Dumper.
 
+require_relative 'helper'
 require 'miguel/dumper'
 
 describe Miguel::Dumper do

@@ -1,5 +1,6 @@
 # Test Schema.
 
+require_relative 'helper'
 require 'miguel/schema'
 
 describe Miguel::Schema do

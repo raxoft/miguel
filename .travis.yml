@@ -1,3 +1,5 @@
+# TravisCI config.
+
 language: ruby
 rvm:
   - ruby-head
@@ -9,8 +11,14 @@ rvm:
   - jruby-head
   - jruby-19mode
 gemfile: .travis.gemfile
+env:
+  global:
+    # travis encrypt CODECLIMATE_REPO_TOKEN=???
+    secure: WjkizgQWf8gx1KIfPsX99TR6uJgnF9ybHUtu/kz0JHWYNif8IJ7qsO+kCXzdGtTiwMgQL4cHzYqbGa6VAiiPQMmG9NPLZ1Q4STLW9W4afg2lOqQmyGk0iSapEu/YXlWM6kZW4IcY/4BG8DzgfJnzy6+4yWBGZFdMwcpJEVZpy02c3Y6RBsrFJ6wz1BpWZR8bHaFXrLzfpHeS8t8h1OYetf1RLg9MvPvankkoIBBxw6ahV9QhG1O2cXyzlfH30wQA90stTFOybUkJ/hVLlCXyxEbjuhUKTWeU4s/Uw5XhA3k5ll0GWyaTUQU3aSWwTDv2Z/dncwR2y8RMuGJqHVLcTz2jtb+NINncrYq5ybGUaCNpdJea7/OS4R6M9t2VS666j5dPN4tVsTgyAONzgHHEmTYwHk3s9s4EKyoHAl398Kv/dazwSmBasvc1kIDzsi6n83k4MHMSNFTBlA4Jz0LaQ7Qx0hxS7MIsGhDmVeeEOQOw1idof6hQdBCpcLfO9NCxqRFWYAgK99U5mXjqRWBeQGyEwrtgbvyweanDrFfHtVEQpUrW1Do4zNz9jZ+MS43hKViu3loH3y20w8Vi96UXWoDp/RreLGMpM33V3xzCC+U3Ex1Dckoq0TgQ8RFD3U/d0KdQJ02B8C3iRmNqD43jGJEJl5USnT58gwgPumLwoCs=
 matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-19mode
     - rvm: jruby-head
+
+# EOF #

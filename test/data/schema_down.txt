@@ -1,0 +1,32 @@
+alter_table :simple do
+  drop_foreign_key [:user_id] # :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+end
+alter_table :reuse do
+  drop_foreign_key [:user_id] # :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+end
+alter_table :compound do
+  drop_foreign_key [:b, :a] # :compound, :on_update => :no_action, :on_delete => :no_action, :key => [:a, :b]
+end
+alter_table :null do
+  drop_foreign_key [:user_id] # :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+end
+alter_table :simple_users do
+  drop_foreign_key [:user_id] # :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+  drop_foreign_key [:simple_id] # :simple, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+end
+alter_table :self_join do
+  drop_foreign_key [:left_id] # :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+  drop_foreign_key [:right_id] # :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+end
+drop_table :sequel_types
+drop_table :miguel_types
+drop_table :native_types
+drop_table :timestamps
+drop_table :users
+drop_table :simple
+drop_table :reuse
+drop_table :compound
+drop_table :null
+drop_table :defaults
+drop_table :simple_users
+drop_table :self_join

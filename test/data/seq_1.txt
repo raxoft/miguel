@@ -1,0 +1,51 @@
+Sequel.migration do
+  up do
+    alter_table :a do
+      set_column_type :a, Float, :null => false
+      add_column :fk, :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+    end
+    alter_table :b do
+      set_column_type :t, String, :null => false, :text => true
+      set_column_default :u, 123
+      set_column_not_null :u
+      set_column_allow_null :s
+      set_column_default :s, nil
+      add_column :create_time, :timestamp, :null => false, :default => "0000-00-00 00:00:00"
+      add_column :update_time, :timestamp, :null => false, :default => "0000-00-00 00:00:00"
+      add_column :fk, :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+    end
+    create_table :c do
+      primary_key :id, :null => false, :unsigned => false, :type => :integer
+      String :s, :null => true
+    end
+    alter_table :a do
+      add_foreign_key [:fk], :c, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    alter_table :b do
+      add_foreign_key [:fk], :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+  end
+  down do
+    alter_table :a do
+      drop_foreign_key [:fk] # :c, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    alter_table :b do
+      drop_foreign_key [:fk] # :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    drop_table :c
+    alter_table :a do
+      drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      set_column_type :a, Integer, :null => false
+    end
+    alter_table :b do
+      drop_column :create_time # :timestamp, :null => false, :default => "0000-00-00 00:00:00"
+      drop_column :update_time # :timestamp, :null => false, :default => "0000-00-00 00:00:00"
+      drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      set_column_type :t, String, :null => false
+      set_column_allow_null :u
+      set_column_default :u, nil
+      set_column_default :s, 0
+      set_column_not_null :s
+    end
+  end
+end

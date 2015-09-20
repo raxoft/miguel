@@ -1,0 +1,131 @@
+Sequel.migration do
+  change do
+    create_table :sequel_types do
+      Integer :a0
+      String :a1
+      String :a2, :size => 50
+      String :a3, :fixed => true
+      String :a4, :fixed => true, :size => 50
+      String :a5, :text => true
+      File :b
+      Fixnum :c
+      Bignum :d
+      Float :e
+      BigDecimal :f
+      BigDecimal :f2, :size => 10
+      BigDecimal :f3, :size => [10, 2]
+      Date :g
+      Time :i2, :only_time => true
+      Numeric :j
+      TrueClass :k
+      FalseClass :l
+    end
+    create_table :miguel_types do
+      String :string, :null => false
+      String :text, :null => false, :text => true
+      File :blob, :null => false
+      Integer :int, :null => false
+      integer :signed, :null => false, :unsigned => false
+      integer :unsigned, :null => false, :unsigned => true
+      Float :float, :null => false
+      TrueClass :bool, :null => false
+      TrueClass :true, :null => false, :default => true
+      TrueClass :false, :null => false, :default => false
+      timestamp :time, :null => false, :default => "0000-00-00 00:00:00"
+      String :custom, :null => false, :fixed => true, :size => 3
+    end
+    create_table :native_types do
+      date :date, :null => false, :default => "2000-12-31"
+      time :time, :null => false, :default => "23:59:59"
+      datetime :datetime, :null => false, :default => "2037-12-31 23:59:59"
+      timestamp :timestamp, :null => false, :default => "1970-01-02 00:00:00"
+    end
+    create_table :timestamps do
+      timestamp :t1, :null => false, :default => "0000-00-00 00:00:00"
+      timestamp :t2, :null => true, :default => nil
+      timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
+      timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
+    end
+    create_table :users do
+      primary_key :id, :null => false, :unsigned => false, :type => :integer
+      String :name, :null => false
+      index [:name], :null => false, :unique => true
+    end
+    create_table :simple do
+      primary_key :id, :null => false, :unsigned => false, :type => :integer
+      integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      index [:user_id], :null => false
+    end
+    create_table :reuse do
+      primary_key :user_id, :null => false, :unsigned => false, :type => :integer
+    end
+    create_table :compound do
+      integer :a, :null => false, :unsigned => true
+      integer :b, :null => false, :unsigned => true
+      primary_key [:a, :b], :null => false, :unsigned => false
+      String :c, :null => false
+      integer :d, :null => false, :unsigned => false
+      index [:a, :c], :null => false, :unique => true
+      index [:b, :c, :d], :null => false
+      index [:b, :a], :null => false
+    end
+    create_table :null do
+      String :string, :null => true
+      String :text, :null => true, :text => true
+      File :blob, :null => true
+      Integer :int, :null => true
+      integer :signed, :null => true, :unsigned => false
+      integer :unsigned, :null => true, :unsigned => true
+      Float :float, :null => true
+      TrueClass :bool, :null => true
+      TrueClass :true, :null => true, :default => true
+      TrueClass :false, :null => true, :default => false
+      timestamp :t, :null => true, :default => nil
+      integer :user_id, :null => true, :key => [:id], :unsigned => false, :type => :integer
+    end
+    create_table :defaults do
+      String :string, :null => false, :default => "abc"
+      Integer :int, :null => false, :default => 10
+      integer :signed, :null => false, :unsigned => false, :default => -1
+      integer :unsigned, :null => false, :unsigned => true, :default => 1000
+      Float :float, :null => false, :default => 3.14
+      TrueClass :bool, :null => false, :default => true
+      timestamp :time, :null => false, :default => "2037-12-31 23:59:59"
+    end
+    create_table :simple_users do
+      integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      integer :simple_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      primary_key [:user_id, :simple_id], :null => false, :unsigned => false
+      index [:simple_id, :user_id], :null => false, :unique => true
+    end
+    create_table :self_join do
+      integer :left_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      integer :right_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      primary_key [:left_id, :right_id], :null => false, :unsigned => false
+      timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
+      timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
+      index [:right_id, :left_id], :null => false, :unique => true
+      index [:create_time], :null => false
+    end
+    alter_table :simple do
+      add_foreign_key [:user_id], :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    alter_table :reuse do
+      add_foreign_key [:user_id], :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    alter_table :compound do
+      add_foreign_key [:b, :a], :compound, :on_update => :no_action, :on_delete => :no_action, :key => [:a, :b]
+    end
+    alter_table :null do
+      add_foreign_key [:user_id], :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    alter_table :simple_users do
+      add_foreign_key [:user_id], :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+      add_foreign_key [:simple_id], :simple, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    alter_table :self_join do
+      add_foreign_key [:left_id], :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+      add_foreign_key [:right_id], :users, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+  end
+end

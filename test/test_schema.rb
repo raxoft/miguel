@@ -5,12 +5,6 @@ require 'miguel/schema'
 
 describe Miguel::Schema do
 
-  DATA_DIR = File.expand_path( "#{__FILE__}/../data" )
-
-  def data( name )
-    "#{DATA_DIR}/#{name}"
-  end
-
   should 'load and dump schema properly' do
     schema = Miguel::Schema.load( data( 'schema.rb' ) )
     schema.dump.to_s.should == File.read( data( 'schema.txt' ) )

@@ -15,11 +15,17 @@ Miguel::Schema.define do
     Signed? :s
     timestamps
     foreign_key :fk, :a
+    unique :u
   end
 
   table :c do
     primary_key :id
     String? :s
+  end
+
+  table :d do
+    Integer :a
+    Integer :b
   end
 
 end

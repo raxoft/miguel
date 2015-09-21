@@ -3,7 +3,6 @@
 Miguel::Schema.define do
 
   table :a do
-    primary_key :id
     Integer :a
   end
 

@@ -2,6 +2,7 @@ Sequel.migration do
   up do
     alter_table :a do
       set_column_type :a, Float, :null => false
+      add_primary_key :id, :null => false, :unsigned => false, :type => :integer
       add_column :fk, :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
     end
     alter_table :b do
@@ -13,10 +14,15 @@ Sequel.migration do
       add_column :create_time, :timestamp, :null => false, :default => "0000-00-00 00:00:00"
       add_column :update_time, :timestamp, :null => false, :default => "0000-00-00 00:00:00"
       add_column :fk, :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      add_index [:u], :unique => true
     end
     create_table :c do
       primary_key :id, :null => false, :unsigned => false, :type => :integer
       String :s, :null => true
+    end
+    create_table :d do
+      Integer :a, :null => false
+      Integer :b, :null => false
     end
     alter_table :a do
       add_foreign_key [:fk], :c, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
@@ -33,11 +39,14 @@ Sequel.migration do
       drop_foreign_key [:fk] # :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
     end
     drop_table :c
+    drop_table :d
     alter_table :a do
+      drop_column :id # :primary_key, :null => false, :unsigned => false, :type => :integer
       drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
       set_column_type :a, Integer, :null => false
     end
     alter_table :b do
+      drop_index [:u] # :unique => true
       drop_column :create_time # :timestamp, :null => false, :default => "0000-00-00 00:00:00"
       drop_column :update_time # :timestamp, :null => false, :default => "0000-00-00 00:00:00"
       drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer

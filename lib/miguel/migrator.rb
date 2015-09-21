@@ -111,7 +111,7 @@ module Miguel
     # Generate code for dropping given columns.
     def dump_drop_columns( out, columns )
       for column in columns
-        if column.type == :primary_key
+        if column.primary_key_constraint?
           out << "drop_constraint #{column.out_name}, :type => :primary_key#{column.out_opts(' # ')}"
         else
           out << "drop_column #{column.out_name} # #{column.out_type}#{column.out_opts}"

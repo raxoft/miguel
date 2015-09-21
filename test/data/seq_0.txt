@@ -1,7 +1,6 @@
 Sequel.migration do
   up do
     create_table :a do
-      primary_key :id, :null => false, :unsigned => false, :type => :integer
       Integer :a, :null => false
     end
     create_table :b do

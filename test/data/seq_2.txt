@@ -1,8 +1,13 @@
 Sequel.migration do
   up do
     alter_table :b do
-      add_index [:u], :unique => true
+      drop_foreign_key [:fk] # :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
+    alter_table :b do
       add_index [:create_time], :unique => false
+    end
+    alter_table :d do
+      add_primary_key [:a, :b], :null => false, :unsigned => false
     end
     create_table :a_b do
       integer :left_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
@@ -10,20 +15,31 @@ Sequel.migration do
       primary_key [:left_id, :right_id], :null => false, :unsigned => false
       index [:right_id, :left_id], :null => false, :unique => true
     end
+    alter_table :b do
+      add_foreign_key [:fk], :c, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
     alter_table :a_b do
       add_foreign_key [:left_id], :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
       add_foreign_key [:right_id], :b, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
     end
   end
   down do
+    alter_table :b do
+      drop_foreign_key [:fk] # :c, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
+    end
     alter_table :a_b do
       drop_foreign_key [:left_id] # :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
       drop_foreign_key [:right_id] # :b, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
     end
     drop_table :a_b
     alter_table :b do
-      drop_index [:u] # :unique => true
       drop_index [:create_time] # :unique => false
+    end
+    alter_table :d do
+      drop_constraint [:a, :b], :type => :primary_key # :null => false, :unsigned => false
+    end
+    alter_table :b do
+      add_foreign_key [:fk], :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
     end
   end
 end

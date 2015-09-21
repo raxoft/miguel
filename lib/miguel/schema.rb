@@ -81,6 +81,11 @@ module Miguel
         @opts = opts
       end
 
+      # Test if the column is in fact just a primary key constraint.
+      def primary_key_constraint?
+        type == :primary_key && name.is_a?( Array )
+      end
+
       # Get the column default.
       def default
         d = opts[ :default ]
@@ -159,7 +164,7 @@ module Miguel
 
       # Get the column options in a canonic way.
       def canonic_opts
-        return {} if type == :primary_key && name.is_a?( Array )
+        return {} if primary_key_constraint?
         o = { :type => canonic_type, :default => default, :null => true }
         o.merge!( DEFAULT_OPTS[ canonic_type ] || {} )
         o.merge!( opts )

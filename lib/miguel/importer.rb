@@ -156,6 +156,38 @@ module Miguel
     # These are usually just schema hints which the user normally doesn't specify.
     IGNORED_OPTS = [ :max_length ]
 
+    # Import column type and options.
+    def import_column_type_and_options( opts )
+      opts = opts.dup
+
+      # Discard anything we don't need.
+
+      opts.delete_if{ |key, value| IGNORED_OPTS.include? key }
+
+      # Import type.
+
+      type = opts.delete( :type )
+      db_type = opts.delete( :db_type )
+
+      type, type_opts = revert_type_literal( db_type, type )
+      opts.merge!( type_opts ) if type_opts
+
+      # Import NULL option.
+
+      opts[ :null ] = opts.delete( :allow_null )
+
+      # Import default value.
+
+      default = opts.delete( :default )
+      ruby_default = opts.delete( :ruby_default )
+
+      default = revert_default( type, default, ruby_default )
+
+      opts[ :default ] = default unless default.nil?
+
+      [ type, opts ]
+    end
+
     # Import columns of given table.
     def import_columns( table )
       schema = db.schema( table.name )
@@ -170,32 +202,9 @@ module Miguel
 
       for name, opts in schema
 
-        opts = opts.dup
+        # Import column type and options.
 
-        # Discard anything we don't need.
-
-        opts.delete_if{ |key, value| IGNORED_OPTS.include? key }
-
-        # Import type.
-
-        type = opts.delete( :type )
-        db_type = opts.delete( :db_type )
-
-        type, type_opts = revert_type_literal( db_type, type )
-        opts.merge!( type_opts ) if type_opts
-
-        # Import NULL option.
-
-        opts[ :null ] = opts.delete( :allow_null )
-
-        # Import default value.
-
-        default = opts.delete( :default )
-        ruby_default = opts.delete( :ruby_default )
-
-        default = revert_default( type, default, ruby_default )
-
-        opts[ :default ] = default unless default.nil?
+        type, opts = import_column_type_and_options( opts )
 
         # Deal with primary keys, which is a bit obscure because of the auto-increment handling.
 

@@ -125,7 +125,7 @@ module Miguel
         if column.type == :primary_key
           out << "add_primary_key #{column.out_name}#{column.out_opts}"
         else
-          out << "add_column #{column.out_name}, #{column.out_type}#{column.out_opts}"
+          out << "add_column #{column.out_name}, #{column.out_type}#{column.out_default_opts}"
         end
       end
     end

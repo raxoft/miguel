@@ -6,6 +6,9 @@ Sequel.migration do
     alter_table :b do
       add_index [:create_time], :unique => false
     end
+    alter_table :c do
+      add_column :t, String, :default => "", :null => false, :text => true
+    end
     alter_table :d do
       add_primary_key [:a, :b], :null => false, :unsigned => false
     end
@@ -34,6 +37,9 @@ Sequel.migration do
     drop_table :a_b
     alter_table :b do
       drop_index [:create_time] # :unique => false
+    end
+    alter_table :c do
+      drop_column :t # String, :null => false, :text => true
     end
     alter_table :d do
       drop_constraint [:a, :b], :type => :primary_key # :null => false, :unsigned => false

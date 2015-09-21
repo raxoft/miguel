@@ -22,6 +22,7 @@ Miguel::Schema.define do
   table :c do
     primary_key :id
     String? :s
+    Text :t
   end
 
   table :d do

@@ -3,7 +3,7 @@ Sequel.migration do
     alter_table :a do
       set_column_type :a, Float, :null => false
       add_primary_key :id, :null => false, :unsigned => false, :type => :integer
-      add_column :fk, :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      add_column :fk, :integer, :default => 0, :null => false, :key => [:id], :unsigned => false, :type => :integer
     end
     alter_table :b do
       set_column_type :t, String, :null => false, :text => true
@@ -11,9 +11,9 @@ Sequel.migration do
       set_column_not_null :u
       set_column_allow_null :s
       set_column_default :s, nil
-      add_column :create_time, :timestamp, :null => false, :default => "0000-00-00 00:00:00"
-      add_column :update_time, :timestamp, :null => false, :default => "0000-00-00 00:00:00"
-      add_column :fk, :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      add_column :create_time, :timestamp, :default => "0000-00-00 00:00:00", :null => false
+      add_column :update_time, :timestamp, :default => "0000-00-00 00:00:00", :null => false
+      add_column :fk, :integer, :default => 0, :null => false, :key => [:id], :unsigned => false, :type => :integer
       add_index [:u], :unique => true
     end
     create_table :c do

@@ -45,6 +45,10 @@ module Miguel
         out_hash( canonic_opts, prefix )
       end
 
+      def out_default_opts( prefix = ', ' )
+        out_hash( default_opts, prefix )
+      end
+
       def out_name
         name.inspect
       end
@@ -172,6 +176,11 @@ module Miguel
         o.delete_if{ |key, value| IGNORED_OPTS.include? key }
       end
 
+      # Get options with default value included.
+      def default_opts
+        { :default => default }.merge( opts )
+      end
+
       # Compare one column with another one.
       def == other
         other.is_a?( Column ) &&
@@ -245,7 +254,7 @@ module Miguel
 
       # Options we ignore when comparing.
       # These are usually tied to the underlying column, not constraint.
-      IGNORED_OPTS = [ :null, :unsigned, :type ]
+      IGNORED_OPTS = [ :null, :unsigned, :type, :default ]
 
       # Get the foreign key options, in a canonic way.
       def canonic_opts

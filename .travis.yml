@@ -20,5 +20,8 @@ matrix:
     - rvm: ruby-head
     - rvm: jruby-19mode
     - rvm: jruby-head
+before_script:
+  - mysql -e 'create database miguel_test;'
+  - psql -c 'create database miguel_test;' -U postgres
 
 # EOF #

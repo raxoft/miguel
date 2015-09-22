@@ -102,7 +102,7 @@ end
 ```
 
 One enhancement is that it allows you to define `NULL` columns simply by adding `?` to the type name.
-Anything else is implicitly `NOT NULL`, which is a really wise default.
+Anything else is implicitly `NOT NULL`, which is a really wise default for many reasons.
 
 Another enhancement is that it allows you to set defaults and
 define custom shortcuts for types which you use frequently.
@@ -130,7 +130,7 @@ set_defaults :foreign_key, key: :id, type: :integer, unsigned: false
 If you prefer unsigned keys instead and your database engine supports it,
 you can pass the `unsigned_keys: true` option to `define` to make it happen.
 If you don't want any of these defaults set up for you,
-pass the `use_defaults: false` option to define instead.
+pass the `use_defaults: false` option to `define` instead.
 
 Finally, the `timestamps` helper can be used to create the
 `create_time` and `update_time` timestamps for you.

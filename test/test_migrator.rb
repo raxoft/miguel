@@ -3,7 +3,7 @@
 require_relative 'helper'
 require 'miguel/migrator'
 
-describe Miguel::Schema do
+describe Miguel::Migrator do
 
   def load( name )
     Miguel::Schema.load( data( name ) )

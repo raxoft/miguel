@@ -99,6 +99,7 @@ describe Miguel::Schema do
   should 'support default miguel types' do
     match_schema <<-EOT do
       table :miguel_types do
+        Integer :key, :null => false, :unsigned => false
         String :string, :null => false
         String :text, :null => false, :text => true
         File :blob, :null => false
@@ -113,6 +114,7 @@ describe Miguel::Schema do
       end
     EOT
       table :miguel_types do
+        Key :key
         String :string
         Text :text
         File :blob
@@ -238,11 +240,11 @@ describe Miguel::Schema do
   should 'support non-incrementing primary keys' do
     match_schema <<-EOT do
       table :pk do
-        Integer :id, :null => false, :primary_key => true
+        Integer :id, :null => false, :unsigned => false, :primary_key => true
       end
     EOT
       table :pk do
-        Integer :id, primary_key: true
+        Key :id, primary_key: true
       end
     end
   end
@@ -299,6 +301,59 @@ describe Miguel::Schema do
       end
     EOT
       table :fk do
+        Integer :x
+        Integer :y
+        foreign_key [:x, :y], :pk, key: [:a, :b]
+      end
+    end
+  end
+
+  should 'support unsigned keys' do
+    match_schema <<-EOT, unsigned_keys: true do
+      table :pk do
+        primary_key :id, :null => false, :unsigned => true, :type => :integer
+      end
+      table :pk2 do
+        Integer :id, :null => false, :unsigned => true, :primary_key => true
+      end
+      table :pk3 do
+        Integer :a, :null => false
+        Integer :b, :null => false
+        primary_key [:a, :b], :null => false, :unsigned => true
+      end
+      table :fk do
+        integer :user_id, :null => false, :key => [:id], :unsigned => true, :type => :integer
+        foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true, :type => :integer
+      end
+      table :fk2 do
+        primary_key :user_id, :null => false, :unsigned => true, :type => :integer
+        foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => true
+      end
+      table :fk3 do
+        Integer :x, :null => false
+        Integer :y, :null => false
+        foreign_key [:x, :y], :pk, :null => false, :key => [:a, :b], :unsigned => true
+      end
+    EOT
+      table :pk do
+        primary_key :id
+      end
+      table :pk2 do
+        Key :id, primary_key: true
+      end
+      table :pk3 do
+        Integer :a
+        Integer :b
+        primary_key [:a, :b]
+      end
+      table :fk do
+        foreign_key :user_id, :users
+      end
+      table :fk2 do
+        primary_key :user_id
+        foreign_key [:user_id], :users
+      end
+      table :fk3 do
         Integer :x
         Integer :y
         foreign_key [:x, :y], :pk, key: [:a, :b]

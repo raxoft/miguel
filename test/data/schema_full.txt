@@ -21,6 +21,7 @@ Sequel.migration do
       FalseClass :l
     end
     create_table :miguel_types do
+      Integer :key, :null => false, :unsigned => false
       String :string, :null => false
       String :text, :null => false, :text => true
       File :blob, :null => false
@@ -60,8 +61,8 @@ Sequel.migration do
       primary_key :user_id, :null => false, :unsigned => false
     end
     create_table :compound do
-      integer :a, :null => false, :unsigned => true
-      integer :b, :null => false, :unsigned => true
+      Integer :a, :null => false
+      Integer :b, :null => false
       primary_key [:a, :b], :null => false, :unsigned => false
       String :c, :null => false
       integer :d, :null => false, :unsigned => false

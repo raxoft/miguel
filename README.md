@@ -123,6 +123,7 @@ set_defaults :Time?, :timestamp, default: nil
 
 set_defaults :unique, :index, unique: true
 
+set_defaults :Key, :Integer, unsigned: false
 set_defaults :primary_key, type: :integer, unsigned: false
 set_defaults :foreign_key, key: :id, type: :integer, unsigned: false
 ```

@@ -19,6 +19,7 @@ table :sequel_types do
   FalseClass :l
 end
 table :miguel_types do
+  Integer :key, :null => false, :unsigned => false
   String :string, :null => false
   String :text, :null => false, :text => true
   File :blob, :null => false
@@ -60,8 +61,8 @@ table :reuse do
   foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false
 end
 table :compound do
-  integer :a, :null => false, :unsigned => true
-  integer :b, :null => false, :unsigned => true
+  Integer :a, :null => false
+  Integer :b, :null => false
   primary_key [:a, :b], :null => false, :unsigned => false
   String :c, :null => false
   integer :d, :null => false, :unsigned => false

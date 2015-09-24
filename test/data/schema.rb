@@ -29,6 +29,7 @@ Miguel::Schema.define( use_defaults: false ) do
   set_defaults :Custom, :String, fixed: true, size: 3
 
   table :miguel_types do
+    Key :key
     String :string
     Text :text
     File :blob
@@ -74,8 +75,8 @@ Miguel::Schema.define( use_defaults: false ) do
   end
 
   table :compound do
-    Unsigned :a
-    Unsigned :b
+    Integer :a
+    Integer :b
     primary_key [:a, :b]
     foreign_key [:b, :a], :compound, key: [:a, :b]
     String :c

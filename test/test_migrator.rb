@@ -9,28 +9,32 @@ describe Miguel::Migrator do
     Miguel::Schema.load( data( name ) )
   end
 
+  def match_file( data, name )
+    match( data, File.read( data( name ) ) )
+  end
+
   should 'create changes needed to create schema' do
     schema = load( 'schema.rb' )
     changes = Miguel::Migrator.new.changes( Miguel::Schema.new, schema )
-    changes.to_s.should == File.read( data( 'schema_bare.txt' ) )
+    match_file( changes, 'schema_bare.txt' )
   end
 
   should 'create changes needed to destroy schema' do
     schema = load( 'schema.rb' )
     changes = Miguel::Migrator.new.changes( schema, Miguel::Schema.new )
-    changes.to_s.should == File.read( data( 'schema_down.txt' ) )
+    match_file( changes, 'schema_down.txt' )
   end
 
   should 'create Sequel change migration' do
     schema = load( 'schema.rb' )
     migration = Miguel::Migrator.new.change_migration( Miguel::Schema.new, schema )
-    migration.to_s.should == File.read( data( 'schema_change.txt' ) )
+    match_file( migration, 'schema_change.txt' )
   end
 
   should 'create Sequel up/down migration' do
     schema = load( 'schema.rb' )
     migration = Miguel::Migrator.new.full_migration( Miguel::Schema.new, schema )
-    migration.to_s.should == File.read( data( 'schema_full.txt' ) )
+    match_file( migration, 'schema_full.txt' )
   end
 
   should 'create migrations to migrate from one schema to another' do
@@ -39,7 +43,7 @@ describe Miguel::Migrator do
     SEQ_COUNT.times do |i|
       new_schema = load( "seq_#{i}.rb" )
       migration = m.full_migration( schema, new_schema )
-      migration.to_s.should == File.read( data( "seq_#{i}.txt" ) )
+      match_file( migration, "seq_#{i}.txt" )
       schema = new_schema
     end
   end

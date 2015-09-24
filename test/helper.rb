@@ -20,6 +20,16 @@ class Bacon::Context
     "#{DATA_DIR}/#{name}"
   end
 
+  def lines( s )
+    s.to_s.lines.map.with_index{ |l, i| "#{i}:#{l.strip}" }
+  end
+
+  def match( a, b )
+    for a, b in lines( a ).zip( lines( b ) )
+      a.should == b
+    end
+  end
+
 end
 
 # EOF #

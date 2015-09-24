@@ -5,18 +5,22 @@ require 'miguel/schema'
 
 describe Miguel::Schema do
 
+  def match_file( schema, name )
+    match( schema.dump, File.read( data( name ) ) )
+  end
+
   should 'load and dump schema properly' do
     schema = Miguel::Schema.load( data( 'schema.rb' ) )
-    schema.dump.to_s.should == File.read( data( 'schema.txt' ) )
+    match_file( schema, 'schema.txt' )
   end
 
   should 'allow changing default schema options temporarily' do
     schema = Miguel::Schema.load( data( 'simple.rb' ), unsigned_keys: true, mysql_timestamps: true )
-    schema.dump.to_s.should == File.read( data( 'simple_mysql.txt' ) )
+    match_file( schema, 'simple_mysql.txt' )
     Miguel::Schema.new.opts.should.be.empty
 
     schema = Miguel::Schema.load( data( 'simple.rb' ) )
-    schema.dump.to_s.should == File.read( data( 'simple.txt' ) )
+    match_file( schema, 'simple.txt' )
   end
 
   should 'allow changing default schema options permanently' do
@@ -27,14 +31,14 @@ describe Miguel::Schema do
     Miguel::Schema.default_options.should == { unsigned_keys: true, mysql_timestamps: true }
 
     schema = Miguel::Schema.load( data( 'simple.rb' ) )
-    schema.dump.to_s.should == File.read( data( 'simple_mysql.txt' ) )
+    match_file( schema, 'simple_mysql.txt' )
 
     Miguel::Schema.default_options = nil
     Miguel::Schema.default_options.should == {}
     Miguel::Schema.new.opts.should.be.empty
 
     schema = Miguel::Schema.load( data( 'simple.rb' ) )
-    schema.dump.to_s.should == File.read( data( 'simple.txt' ) )
+    match_file( schema, 'simple.txt' )
   end
 
 end

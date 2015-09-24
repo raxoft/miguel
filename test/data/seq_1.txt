@@ -2,8 +2,8 @@ Sequel.migration do
   up do
     alter_table :a do
       set_column_type :a, Float, :null => false
-      add_primary_key :id, :null => false, :unsigned => false, :type => :integer
-      add_column :fk, :integer, :default => 0, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      add_primary_key :id, :null => false, :unsigned => false
+      add_column :fk, :integer, :default => 0, :null => false, :key => [:id], :unsigned => false
     end
     alter_table :b do
       set_column_type :t, String, :null => false, :text => true
@@ -13,11 +13,11 @@ Sequel.migration do
       set_column_default :s, nil
       add_column :create_time, :timestamp, :default => "0000-00-00 00:00:00", :null => false
       add_column :update_time, :timestamp, :default => "0000-00-00 00:00:00", :null => false
-      add_column :fk, :integer, :default => 0, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      add_column :fk, :integer, :default => 0, :null => false, :key => [:id], :unsigned => false
       add_index [:u], :unique => true
     end
     create_table :c do
-      primary_key :id, :null => false, :unsigned => false, :type => :integer
+      primary_key :id, :null => false, :unsigned => false
       String :s, :null => true
     end
     create_table :d do
@@ -41,15 +41,15 @@ Sequel.migration do
     drop_table :c
     drop_table :d
     alter_table :a do
-      drop_column :id # :primary_key, :null => false, :unsigned => false, :type => :integer
-      drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      drop_column :id # :primary_key, :null => false, :unsigned => false
+      drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false
       set_column_type :a, Integer, :null => false
     end
     alter_table :b do
       drop_index [:u] # :unique => true
       drop_column :create_time # :timestamp, :null => false, :default => "0000-00-00 00:00:00"
       drop_column :update_time # :timestamp, :null => false, :default => "0000-00-00 00:00:00"
-      drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false
       set_column_type :t, String, :null => false
       set_column_allow_null :u
       set_column_default :u, nil

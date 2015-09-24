@@ -47,17 +47,17 @@ Sequel.migration do
       timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
     end
     create_table :users do
-      primary_key :id, :null => false, :unsigned => false, :type => :integer
+      primary_key :id, :null => false, :unsigned => false
       String :name, :null => false
       index [:name], :null => false, :unique => true
     end
     create_table :simple do
-      primary_key :id, :null => false, :unsigned => false, :type => :integer
-      integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      primary_key :id, :null => false, :unsigned => false
+      integer :user_id, :null => false, :key => [:id], :unsigned => false
       index [:user_id], :null => false
     end
     create_table :reuse do
-      primary_key :user_id, :null => false, :unsigned => false, :type => :integer
+      primary_key :user_id, :null => false, :unsigned => false
     end
     create_table :compound do
       integer :a, :null => false, :unsigned => true
@@ -81,7 +81,7 @@ Sequel.migration do
       TrueClass :true, :null => true, :default => true
       TrueClass :false, :null => true, :default => false
       timestamp :t, :null => true, :default => nil
-      integer :user_id, :null => true, :key => [:id], :unsigned => false, :type => :integer
+      integer :user_id, :null => true, :key => [:id], :unsigned => false
     end
     create_table :defaults do
       String :string, :null => false, :default => "abc"
@@ -93,14 +93,14 @@ Sequel.migration do
       timestamp :time, :null => false, :default => "2037-12-31 23:59:59"
     end
     create_table :simple_users do
-      integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
-      integer :simple_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      integer :user_id, :null => false, :key => [:id], :unsigned => false
+      integer :simple_id, :null => false, :key => [:id], :unsigned => false
       primary_key [:user_id, :simple_id], :null => false, :unsigned => false
       index [:simple_id, :user_id], :null => false, :unique => true
     end
     create_table :self_join do
-      integer :left_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
-      integer :right_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      integer :left_id, :null => false, :key => [:id], :unsigned => false
+      integer :right_id, :null => false, :key => [:id], :unsigned => false
       primary_key [:left_id, :right_id], :null => false, :unsigned => false
       timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
       timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"

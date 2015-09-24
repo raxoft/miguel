@@ -13,8 +13,8 @@ Sequel.migration do
       add_primary_key [:a, :b], :null => false, :unsigned => false
     end
     create_table :a_b do
-      integer :left_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
-      integer :right_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+      integer :left_id, :null => false, :key => [:id], :unsigned => false
+      integer :right_id, :null => false, :key => [:id], :unsigned => false
       primary_key [:left_id, :right_id], :null => false, :unsigned => false
       index [:right_id, :left_id], :null => false, :unique => true
     end

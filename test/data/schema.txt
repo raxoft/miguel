@@ -45,18 +45,18 @@ table :timestamps do
   timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
 end
 table :users do
-  primary_key :id, :null => false, :unsigned => false, :type => :integer
+  primary_key :id, :null => false, :unsigned => false
   String :name, :null => false
   index [:name], :null => false, :unique => true
 end
 table :simple do
-  primary_key :id, :null => false, :unsigned => false, :type => :integer
-  integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  primary_key :id, :null => false, :unsigned => false
+  integer :user_id, :null => false, :key => [:id], :unsigned => false
   index [:user_id], :null => false
-  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false
 end
 table :reuse do
-  primary_key :user_id, :null => false, :unsigned => false, :type => :integer
+  primary_key :user_id, :null => false, :unsigned => false
   foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false
 end
 table :compound do
@@ -82,8 +82,8 @@ table :null do
   TrueClass :true, :null => true, :default => true
   TrueClass :false, :null => true, :default => false
   timestamp :t, :null => true, :default => nil
-  integer :user_id, :null => true, :key => [:id], :unsigned => false, :type => :integer
-  foreign_key [:user_id], :users, :null => true, :key => [:id], :unsigned => false, :type => :integer
+  integer :user_id, :null => true, :key => [:id], :unsigned => false
+  foreign_key [:user_id], :users, :null => true, :key => [:id], :unsigned => false
 end
 table :defaults do
   String :string, :null => false, :default => "abc"
@@ -95,21 +95,21 @@ table :defaults do
   timestamp :time, :null => false, :default => "2037-12-31 23:59:59"
 end
 table :simple_users do
-  integer :user_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
-  integer :simple_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  integer :user_id, :null => false, :key => [:id], :unsigned => false
+  integer :simple_id, :null => false, :key => [:id], :unsigned => false
   primary_key [:user_id, :simple_id], :null => false, :unsigned => false
   index [:simple_id, :user_id], :null => false, :unique => true
-  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
-  foreign_key [:simple_id], :simple, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  foreign_key [:user_id], :users, :null => false, :key => [:id], :unsigned => false
+  foreign_key [:simple_id], :simple, :null => false, :key => [:id], :unsigned => false
 end
 table :self_join do
-  integer :left_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
-  integer :right_id, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  integer :left_id, :null => false, :key => [:id], :unsigned => false
+  integer :right_id, :null => false, :key => [:id], :unsigned => false
   primary_key [:left_id, :right_id], :null => false, :unsigned => false
   timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
   timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
   index [:right_id, :left_id], :null => false, :unique => true
   index [:create_time], :null => false
-  foreign_key [:left_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
-  foreign_key [:right_id], :users, :null => false, :key => [:id], :unsigned => false, :type => :integer
+  foreign_key [:left_id], :users, :null => false, :key => [:id], :unsigned => false
+  foreign_key [:right_id], :users, :null => false, :key => [:id], :unsigned => false
 end

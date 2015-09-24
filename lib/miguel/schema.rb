@@ -542,14 +542,16 @@ module Miguel
       # Unfortunately, :unsigned currently works only with :integer,
       # not the default :Integer, and :integer can't be specified for compound keys,
       # so we have to use the callback to set the type only at correct times.
+      # Furthermore, Postgres's autoincrementing serials only work with Integer,
+      # so we set the type only as long as the unsigned keys are not requested.
 
       unsigned_keys = !! opts[ :unsigned_keys ]
 
       set_defaults :primary_key, :unsigned => unsigned_keys do |opts,args,table|
-        opts[ :type ] ||= :integer unless args.first.is_a? Array
+        opts[ :type ] ||= :integer unless args.first.is_a? Array or not opts[ :unsigned ]
       end
       set_defaults :foreign_key, :key => :id, :unsigned => unsigned_keys do |opts,args,table|
-        opts[ :type ] ||= :integer unless args.first.is_a? Array
+        opts[ :type ] ||= :integer unless args.first.is_a? Array or not opts[ :unsigned ]
       end
 
       # Save some typing for unique indexes.

@@ -489,6 +489,7 @@ module Miguel
     # Also note that the defaults are applied in the instant the +table+ block is evaluated,
     # so it is eventually possible (though not necessarily recommended) to change them in between.
     def set_defaults( name, *args, &block )
+      clear_defaults( name )
       @aliases[ name ] = args.shift if args.first.is_a? Symbol
       @defaults[ name ] = args.pop if args.last.is_a? Hash
       @callbacks[ name ] = block

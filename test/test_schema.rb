@@ -5,6 +5,10 @@ require 'miguel/schema'
 
 describe Miguel::Schema do
 
+  after do
+    Miguel::Schema.default_options = nil
+  end
+
   def match_file( schema, name )
     match( schema.dump, File.read( data( name ) ) )
   end

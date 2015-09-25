@@ -8,8 +8,23 @@ require 'yaml'
 
 describe Miguel::Importer do
 
-  def load( name )
-    Miguel::Schema.load( data( name ) )
+  def database_options( db )
+    case db.database_type
+    when :mysql
+      [
+        {},
+        { unsigned_keys: true },
+        { mysql_timestamps: true },
+      ]
+    when :postgres
+      [ signed_unsigned: true ]
+    else
+      [ {} ]
+    end
+  end
+
+  def load( name, opts = {} )
+    Miguel::Schema.load( data( name ), opts )
   end
 
   def get_changes( db, schema )
@@ -30,17 +45,19 @@ describe Miguel::Importer do
 
   should 'correctly import schema from each supported database' do
     empty = Miguel::Schema.new
-    schema = load( 'schema.rb' )
     for db in databases
-      apply_schema( db, empty )
-      get_changes( db, empty ).should.be.empty
-      get_changes( db, schema ).should.not.be.empty
-      apply_schema( db, schema )
-      get_changes( db, schema ).should.be.empty
-      get_changes( db, empty ).should.not.be.empty
-      apply_schema( db, empty )
-      get_changes( db, empty ).should.be.empty
-      get_changes( db, schema ).should.not.be.empty
+      for opts in database_options( db )
+        schema = load( 'schema.rb', opts )
+        apply_schema( db, empty )
+        get_changes( db, empty ).should.be.empty
+        get_changes( db, schema ).should.not.be.empty
+        apply_schema( db, schema )
+        get_changes( db, schema ).should.be.empty
+        get_changes( db, empty ).should.not.be.empty
+        apply_schema( db, empty )
+        get_changes( db, empty ).should.be.empty
+        get_changes( db, schema ).should.not.be.empty
+      end
     end
   end
 

@@ -105,27 +105,24 @@ module Miguel
 
     # Convert given database default of given type to default used by our schema definitions.
     def revert_default( type, default, ruby_default )
-      default = ruby_default unless ruby_default.nil?
-      return if default.nil?
-
-      case default
-      when String, Numeric, TrueClass, FalseClass
-      when DateTime
-        default = default.strftime( '%F %T' )
-      else
-        default = default.to_s
-      end
-
       if type.to_s =~ /date|time/
         case default
-        when /\A'([-: \d]+)'\z/
-          default = $1
         when 'CURRENT_TIMESTAMP'
           # This matches our use of MySQL timestamps in schema definitions.
-          default = Sequel.lit('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+          return Sequel.lit('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
         end
       end
-      default
+
+      default = ruby_default unless ruby_default.nil?
+
+      case default
+      when nil, String, Numeric, TrueClass, FalseClass
+        return default
+      when DateTime
+        return default.strftime( '%F %T' )
+      else
+        return default.to_s
+      end
     end
 
     # Import indexes of given table.

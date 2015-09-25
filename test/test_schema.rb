@@ -99,7 +99,7 @@ describe Miguel::Schema do
   should 'support default miguel types' do
     match_schema <<-EOT do
       table :miguel_types do
-        Integer :key, :null => false, :unsigned => false
+        integer :key, :null => false, :unsigned => false
         String :string, :null => false
         String :text, :null => false, :text => true
         File :blob, :null => false
@@ -240,7 +240,7 @@ describe Miguel::Schema do
   should 'support non-incrementing primary keys' do
     match_schema <<-EOT do
       table :pk do
-        Integer :id, :null => false, :unsigned => false, :primary_key => true
+        integer :id, :null => false, :unsigned => false, :primary_key => true
       end
     EOT
       table :pk do
@@ -314,7 +314,7 @@ describe Miguel::Schema do
         primary_key :id, :null => false, :unsigned => true, :type => :integer
       end
       table :pk2 do
-        Integer :id, :null => false, :unsigned => true, :primary_key => true
+        integer :id, :null => false, :unsigned => true, :primary_key => true
       end
       table :pk3 do
         Integer :a, :null => false

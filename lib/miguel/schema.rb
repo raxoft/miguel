@@ -527,7 +527,7 @@ module Miguel
     #
     #   :unique, :index, :unique => true
     #
-    #   :Key, :Integer, :unsigned => false
+    #   :Key, :integer, :unsigned => false
     #   :primary_key, :type => :integer, :unsigned => false
     #   :foreign_key, :key => :id, :type => :integer, :unsigned => false
     #
@@ -549,7 +549,7 @@ module Miguel
 
       unsigned_keys = !! opts[ :unsigned_keys ]
 
-      set_defaults :Key, :Integer, :unsigned => unsigned_keys
+      set_defaults :Key, :integer, :unsigned => unsigned_keys
       set_defaults :primary_key, :unsigned => unsigned_keys do |opts,args,table|
         opts[ :type ] ||= :integer unless args.first.is_a? Array or not opts[ :unsigned ]
       end

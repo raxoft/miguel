@@ -19,7 +19,7 @@ table :sequel_types do
   FalseClass :l
 end
 table :miguel_types do
-  Integer :key, :null => false, :unsigned => false
+  integer :key, :null => false, :unsigned => false
   String :string, :null => false
   String :text, :null => false, :text => true
   File :blob, :null => false

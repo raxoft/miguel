@@ -118,7 +118,7 @@ set_defaults :False, :TrueClass, default: false
 set_defaults :Signed, :integer, unsigned: false
 set_defaults :Unsigned, :integer, unsigned: true
 set_defaults :Text, :String, text: true
-set_defaults :Time, :timestamp, default: '0000-00-00 00:00:00'
+set_defaults :Time, :timestamp, default: '2000-01-01 00:00:00'
 set_defaults :Time?, :timestamp, default: nil
 
 set_defaults :unique, :index, unique: true
@@ -129,14 +129,15 @@ set_defaults :foreign_key, key: :id, type: :integer, unsigned: false
 ```
 
 If you prefer unsigned keys instead and your database engine supports it,
-you can pass the `unsigned_keys: true` option to `define` to make it happen.
+you can pass the `unsigned_keys: true` option to `Schema.define` to make it happen.
 If you don't want any of these defaults set up for you,
 pass the `use_defaults: false` option to `define` instead.
 
 Finally, the `timestamps` helper can be used to create the
 `create_time` and `update_time` timestamps for you.
 If you pass the `mysql_timestamps: true` option to `define`,
-the `update_time` timestamp will have the MySQL auto-update feature enabled.
+the `update_time` timestamp will have the MySQL auto-update feature enabled,
+and timestamps will use the `'0000-00-00 00:00:00'` default by default.
 
 ## Using the command
 

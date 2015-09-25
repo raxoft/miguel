@@ -9,8 +9,11 @@ module Miguel
   # Class for defining database schema.
   class Schema
 
-    # String denoting zero time.
+    # String denoting zero time in MySQL.
     ZERO_TIME = '0000-00-00 00:00:00'.freeze
+
+    # String denoting default time.
+    DEFAULT_TIME = '2000-01-01 00:00:00'.freeze
 
     # Module for pretty printing of names, types, and especially options.
     module Output
@@ -576,7 +579,8 @@ module Miguel
       # we have to be careful to turn off the MySQL autoupdate behavior.
       # That's why we have to set defaults explicitly.
 
-      set_defaults :Time, :timestamp, :default => ZERO_TIME
+      default_time = opts[ :mysql_timestamps ] ? ZERO_TIME : DEFAULT_TIME
+      set_defaults :Time, :timestamp, :default => default_time
       set_defaults :Time?, :timestamp, :default => nil
 
       self

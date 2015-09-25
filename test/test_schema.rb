@@ -110,7 +110,7 @@ describe Miguel::Schema do
         TrueClass :bool, :null => false
         TrueClass :true, :null => false, :default => true
         TrueClass :false, :null => false, :default => false
-        timestamp :time, :null => false, :default => "0000-00-00 00:00:00"
+        timestamp :time, :null => false, :default => "2000-01-01 00:00:00"
       end
     EOT
       table :miguel_types do
@@ -194,10 +194,10 @@ describe Miguel::Schema do
   should 'support generic timestamps' do
     match_schema <<-EOT do
       table :timestamps do
-        timestamp :t1, :null => false, :default => "0000-00-00 00:00:00"
+        timestamp :t1, :null => false, :default => "2000-01-01 00:00:00"
         timestamp :t2, :null => true, :default => nil
-        timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
-        timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
+        timestamp :create_time, :null => false, :default => "2000-01-01 00:00:00"
+        timestamp :update_time, :null => false, :default => "2000-01-01 00:00:00"
       end
     EOT
       table :timestamps do

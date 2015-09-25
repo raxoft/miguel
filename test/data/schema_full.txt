@@ -32,7 +32,7 @@ Sequel.migration do
       TrueClass :bool, :null => false
       TrueClass :true, :null => false, :default => true
       TrueClass :false, :null => false, :default => false
-      timestamp :time, :null => false, :default => "0000-00-00 00:00:00"
+      timestamp :time, :null => false, :default => "2000-01-01 00:00:00"
       String :custom, :null => false, :fixed => true, :size => 3
     end
     create_table :native_types do
@@ -42,10 +42,10 @@ Sequel.migration do
       timestamp :timestamp, :null => false, :default => "1970-01-02 00:00:00"
     end
     create_table :timestamps do
-      timestamp :t1, :null => false, :default => "0000-00-00 00:00:00"
+      timestamp :t1, :null => false, :default => "2000-01-01 00:00:00"
       timestamp :t2, :null => true, :default => nil
-      timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
-      timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
+      timestamp :create_time, :null => false, :default => "2000-01-01 00:00:00"
+      timestamp :update_time, :null => false, :default => "2000-01-01 00:00:00"
     end
     create_table :users do
       primary_key :id, :null => false, :unsigned => false
@@ -103,8 +103,8 @@ Sequel.migration do
       integer :left_id, :null => false, :key => [:id], :unsigned => false
       integer :right_id, :null => false, :key => [:id], :unsigned => false
       primary_key [:left_id, :right_id], :null => false, :unsigned => false
-      timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
-      timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
+      timestamp :create_time, :null => false, :default => "2000-01-01 00:00:00"
+      timestamp :update_time, :null => false, :default => "2000-01-01 00:00:00"
       index [:right_id, :left_id], :null => false, :unique => true
       index [:create_time], :null => false
     end

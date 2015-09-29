@@ -12,6 +12,10 @@ mysql:
   encoding: utf8
 
 postgres:
-  adapter: sqlite
+  adapter: postgres
+  user: postgres
+  host: localhost
+  database: miguel_test
+  encoding: utf8
 
 # EOF #

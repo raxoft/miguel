@@ -61,6 +61,19 @@ module Miguel
         when /\Ainteger UNSIGNED\z/
           return :integer, :unsigned => true
         end
+      when :postgres
+        case type
+        when /\Acharacter varying/
+          return :String, :default_size => 255
+        when /\Acharacter/
+          return :String, :fixed => true, :default_size => 255
+        when /\Atext\z/
+          return :String, :text => true
+        when /\Abytea\z/
+          return :blob
+        when /\Atimestamp/
+          return :timestamp
+        end
       end
 
       case type
@@ -151,7 +164,7 @@ module Miguel
 
     # Options which are ignored for columns.
     # These are usually just schema hints which the user normally doesn't specify.
-    IGNORED_OPTS = [ :max_length ]
+    IGNORED_OPTS = [ :max_length, :oid ]
 
     # Import column type and options.
     def import_column_type_and_options( opts )

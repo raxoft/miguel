@@ -571,7 +571,7 @@ module Miguel
       set_defaults :False, :TrueClass, :default => false
 
       set_defaults :Signed, :integer, :unsigned => false
-      set_defaults :Unsigned, :integer, :unsigned => true
+      set_defaults :Unsigned, :integer, :unsigned => ! opts[ :signed_unsigned ]
 
       set_defaults :Text, :String, :text => true
 

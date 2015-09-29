@@ -157,7 +157,7 @@ module Miguel
 
       # Default options implied for certain types.
       DEFAULT_OPTS = {
-        :string => { :size => 255 },
+        :string => { :size => 255, :text => false },
         :bigint => { :size => 20 },
         :decimal => { :size => [ 10, 0 ] },
         :integer => { :unsigned => false },
@@ -573,6 +573,7 @@ module Miguel
       set_defaults :Signed, :integer, :unsigned => false
       set_defaults :Unsigned, :integer, :unsigned => ! opts[ :signed_unsigned ]
 
+      set_defaults :String, :text => false
       set_defaults :Text, :String, :text => true
 
       # We want times to be stored as 4 byte timestamps, however

@@ -104,7 +104,7 @@ describe Miguel::Schema do
     match_schema <<-EOT do
       table :miguel_types do
         integer :key, :null => false, :unsigned => false
-        String :string, :null => false
+        String :string, :null => false, :text => false
         String :text, :null => false, :text => true
         File :blob, :null => false
         Integer :int, :null => false
@@ -370,7 +370,7 @@ describe Miguel::Schema do
       table :index do
         Integer :a, :null => false
         Integer :b, :null => false
-        String :s, :null => false
+        String :s, :null => false, :text => false
         index [:a], :null => false
         index [:b], :null => false, :unique => true
         index [:a, :b], :null => false
@@ -392,7 +392,7 @@ describe Miguel::Schema do
   should 'support null columns' do
     match_schema <<-EOT do
       table :null do
-        String :string, :null => true
+        String :string, :null => true, :text => false
         String :text, :null => true, :text => true
         File :blob, :null => true
         Integer :int, :null => true
@@ -427,7 +427,7 @@ describe Miguel::Schema do
   should 'support default values' do
     match_schema <<-EOT do
       table :defaults do
-        String :string, :null => false, :default => "abc"
+        String :string, :null => false, :text => false, :default => "abc"
         Integer :int, :null => false, :default => 10
         integer :signed, :null => false, :unsigned => false, :default => -1
         integer :unsigned, :null => false, :unsigned => true, :default => 1000
@@ -496,7 +496,7 @@ describe Miguel::Schema do
         integer :left_id, :null => false, :key => [:id], :unsigned => false
         integer :right_id, :null => false, :key => [:id], :unsigned => false
         primary_key [:left_id, :right_id], :null => false, :unsigned => false
-        String :name, :null => false
+        String :name, :null => false, :text => false
         index [:right_id, :left_id], :null => false, :unique => true
         foreign_key [:left_id], :left, :null => false, :key => [:id], :unsigned => false
         foreign_key [:right_id], :right, :null => false, :key => [:id], :unsigned => false

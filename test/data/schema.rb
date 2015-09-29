@@ -4,7 +4,7 @@ Miguel::Schema.define( use_defaults: false ) do
 
   table :sequel_types do
     Integer :a0                         # integer
-    String :a1                          # varchar(255)
+    String :a1, :text=>false            # varchar(255)
     String :a2, :size=>50               # varchar(50)
     String :a3, :fixed=>true            # char(255)
     String :a4, :fixed=>true, :size=>50 # char(50)

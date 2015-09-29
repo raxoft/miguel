@@ -5,7 +5,7 @@ Sequel.migration do
     end
     create_table :b do
       primary_key :id, :null => false, :unsigned => false
-      String :t, :null => false
+      String :t, :null => false, :text => false
       integer :u, :null => true, :unsigned => true
       integer :s, :null => false, :unsigned => false
     end

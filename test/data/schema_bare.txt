@@ -1,6 +1,6 @@
 create_table :sequel_types do
   Integer :a0
-  String :a1
+  String :a1, :text => false
   String :a2, :size => 50
   String :a3, :fixed => true
   String :a4, :fixed => true, :size => 50
@@ -20,7 +20,7 @@ create_table :sequel_types do
 end
 create_table :miguel_types do
   integer :key, :null => false, :unsigned => false
-  String :string, :null => false
+  String :string, :null => false, :text => false
   String :text, :null => false, :text => true
   File :blob, :null => false
   Integer :int, :null => false
@@ -46,7 +46,7 @@ create_table :timestamps do
 end
 create_table :users do
   primary_key :id, :null => false, :unsigned => false
-  String :name, :null => false
+  String :name, :null => false, :text => false
   index [:name], :null => false, :unique => true
 end
 create_table :simple do
@@ -61,14 +61,14 @@ create_table :compound do
   Integer :a, :null => false
   Integer :b, :null => false
   primary_key [:a, :b], :null => false, :unsigned => false
-  String :c, :null => false
+  String :c, :null => false, :text => false
   integer :d, :null => false, :unsigned => false
   index [:a, :c], :null => false, :unique => true
   index [:b, :c, :d], :null => false
   index [:b, :a], :null => false
 end
 create_table :null do
-  String :string, :null => true
+  String :string, :null => true, :text => false
   String :text, :null => true, :text => true
   File :blob, :null => true
   Integer :int, :null => true
@@ -82,7 +82,7 @@ create_table :null do
   integer :user_id, :null => true, :key => [:id], :unsigned => false
 end
 create_table :defaults do
-  String :string, :null => false, :default => "abc"
+  String :string, :null => false, :text => false, :default => "abc"
   Integer :int, :null => false, :default => 10
   integer :signed, :null => false, :unsigned => false, :default => -1
   integer :unsigned, :null => false, :unsigned => true, :default => 1000

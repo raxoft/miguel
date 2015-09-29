@@ -117,6 +117,7 @@ set_defaults :True, :TrueClass, default: true
 set_defaults :False, :TrueClass, default: false
 set_defaults :Signed, :integer, unsigned: false
 set_defaults :Unsigned, :integer, unsigned: true
+set_defaults :String, text: false
 set_defaults :Text, :String, text: true
 set_defaults :Time, :timestamp, default: '2000-01-01 00:00:00'
 set_defaults :Time?, :timestamp, default: nil
@@ -165,7 +166,7 @@ or by the common database `.yml` config file:
 ``` yaml
 # Example db.yml.
 adapter: mysql2
-user: jim
+user: dev
 password: sup3rsecr3t
 host: localhost
 database: main

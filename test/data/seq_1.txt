@@ -18,7 +18,7 @@ Sequel.migration do
     end
     create_table :c do
       primary_key :id, :null => false, :unsigned => false
-      String :s, :null => true
+      String :s, :null => true, :text => false
     end
     create_table :d do
       Integer :a, :null => false
@@ -50,7 +50,7 @@ Sequel.migration do
       drop_column :create_time # :timestamp, :null => false, :default => "2000-01-01 00:00:00"
       drop_column :update_time # :timestamp, :null => false, :default => "2000-01-01 00:00:00"
       drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false
-      set_column_type :t, String, :null => false
+      set_column_type :t, String, :null => false, :text => false
       set_column_allow_null :u
       set_column_default :u, nil
       set_column_default :s, 0

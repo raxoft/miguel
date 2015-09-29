@@ -1,6 +1,6 @@
 table :items do
   primary_key :id, :null => false, :unsigned => false
-  String :name, :null => false
+  String :name, :null => false, :text => false
   integer :parent_id, :null => false, :key => [:id], :unsigned => false
   timestamp :create_time, :null => false, :default => "2000-01-01 00:00:00"
   timestamp :update_time, :null => false, :default => "2000-01-01 00:00:00"

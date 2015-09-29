@@ -36,7 +36,6 @@ end
 table :native_types do
   date :date, :null => false, :default => "2000-12-31"
   time :time, :null => false, :default => "23:59:59"
-  datetime :datetime, :null => false, :default => "2037-12-31 23:59:59"
   timestamp :timestamp, :null => false, :default => "1970-01-02 00:00:00"
 end
 table :timestamps do

@@ -47,7 +47,6 @@ Miguel::Schema.define( use_defaults: false ) do
   table :native_types do
     date :date, default: '2000-12-31'
     time :time, default: '23:59:59'
-    datetime :datetime, default: '2037-12-31 23:59:59'
     timestamp :timestamp, default: '1970-01-02 00:00:00'
   end
 

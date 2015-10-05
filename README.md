@@ -193,7 +193,10 @@ leaving dozens of piecewise migration files finally behind.
 ## Limitations
 
 The database specific type support is geared towards [MySQL][] and [SQLite][].
-Generic types should work with any database, but your mileage may vary.
+[Postgres][] is supported as well,
+but note that it lacks support for some common types (e.g., unsigned integers)
+compared to other databases.
+Generic types should however work with any database, even though your mileage may vary.
 
 Changing primary keys can be as problematic as with normal Sequel migrations,
 so it's best to set them once and stick with them.
@@ -212,3 +215,4 @@ Miguel is released under the MIT license.
 [Sequel]: http://sequel.jeremyevans.net/
 [MySQL]: https://www.mysql.com/
 [SQLite]: https://www.sqlite.org/
+[Postgres]: http://www.postgresql.org/

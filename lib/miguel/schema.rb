@@ -646,7 +646,9 @@ module Miguel
 
       # Define schema with provided block.
       def define( opts = {}, &block )
-        set_schema( new( opts ).define( &block ) )
+        sync do
+          set_schema( new( opts ).define( &block ) )
+        end
       end
 
       # Load schema from given file.
@@ -672,7 +674,7 @@ module Miguel
 
       # Store given schema for later if requested.
       def set_schema( schema )
-        sync{ @schema = schema if @schema == self }
+        @schema = schema if @schema == self
         schema
       end
 

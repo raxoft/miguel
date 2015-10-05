@@ -79,12 +79,14 @@ describe Miguel::Command do
   end
 
   should 'show changes needed to migrate from one schema to another' do
-    schema = 'sqlite://'
-    SEQ_COUNT.times do |i|
-      new_schema = data( "seq_#{i}.rb" )
-      out = test( 'diff', '-m', 'full', schema, new_schema )
-      match_file( out, "seq_#{i}.txt" )
-      schema = new_schema
+    with_tempfile( nil, 'db' ) do |path|
+      schema = "sqlite://#{path}"
+      SEQ_COUNT.times do |i|
+        new_schema = data( "seq_#{i}.rb" )
+        out = test( 'diff', '-m', 'full', schema, new_schema )
+        match_file( out, "seq_#{i}.txt" )
+        schema = new_schema
+      end
     end
   end
 

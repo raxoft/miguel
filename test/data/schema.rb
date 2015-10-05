@@ -2,6 +2,8 @@
 
 Miguel::Schema.define( use_defaults: false ) do
 
+  mysql = opts[ :mysql_timestamps ]
+
   table :sequel_types do
     Integer :a0                         # integer
     String :a1, :text=>false            # varchar(255)
@@ -48,6 +50,12 @@ Miguel::Schema.define( use_defaults: false ) do
     date :date, default: '2000-12-31'
     time :time, default: '23:59:59'
     timestamp :timestamp, default: '1970-01-02 00:00:00'
+    if mysql
+      datetime :datetime, default: '2037-12-31 23:59:59'
+      enum :enum, elements: %w[ none invalid expired declined other ], default: 'none'
+      set :set, elements: %w[ read write create delete ], default: 'read'
+      set :tricky, elements: [ "\n", "\t", "\\", "r'n'r" ]
+    end
   end
 
   table :timestamps do

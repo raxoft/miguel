@@ -147,6 +147,7 @@ module Miguel
         opts = opts.dup
         columns = opts.delete( :columns )
         next if ( ! opts[ :unique ] ) && foreign_key_indexes.include?( columns ) && name == columns.first
+        opts.delete( :deferrable ) unless opts[ :deferrable ]
         table.add_index( columns, opts )
       end
     end
@@ -158,6 +159,7 @@ module Miguel
         name = opts.delete( :name )
         columns = opts.delete( :columns )
         table_name = opts.delete( :table )
+        opts.delete( :deferrable ) unless opts[ :deferrable ]
         table.add_foreign_key( columns, table_name, opts )
       end
     end
@@ -223,6 +225,7 @@ module Miguel
 
         if primary_key && ! multi_primary_key
           if auto_increment
+            opts.delete( :default ) if opts[ :default ].to_s =~ /\Anextval/
             table.add_column( :primary_key, name, opts.merge( :type => type ) )
             next
           end

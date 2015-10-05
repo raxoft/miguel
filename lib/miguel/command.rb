@@ -136,8 +136,8 @@ module Miguel
 
     # Make sure the argument count is as expected.
     def check_args( args, count )
-      fail "Not enough arguments present', use -h to see usage." if args.count < count
-      fail "Extra arguments present', use -h to see usage." if args.count > count
+      fail "Not enough arguments present, use -h to see usage." if args.count < count
+      fail "Extra arguments present, use -h to see usage." if args.count > count
     end
 
     # Import schema from given database.

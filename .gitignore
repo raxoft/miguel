@@ -1,3 +1,5 @@
 *~
 /miguel-*.gem
 /coverage
+/doc
+/.yardoc

@@ -548,7 +548,7 @@ module Miguel
       # not the default :Integer, and :integer can't be specified for compound keys,
       # so we have to use the callback to set the type only at correct times.
       # Furthermore, Postgres's autoincrementing serials only work with Integer,
-      # so we set the type only as long as the unsigned keys are not requested.
+      # so we set the type only as long as the unsigned keys are requested.
 
       unsigned_keys = !! opts[ :unsigned_keys ]
 

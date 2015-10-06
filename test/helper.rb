@@ -2,6 +2,10 @@
 
 # Test coverage if enabled.
 
+def jruby?
+  defined?( RUBY_ENGINE ) and RUBY_ENGINE == 'jruby'
+end
+
 if ENV[ 'COVERAGE' ]
   require 'simplecov'
   SimpleCov.start
@@ -12,7 +16,7 @@ begin
   CodeClimate::TestReporter.start
   ENV[ 'COVERAGE' ] = 'on'
 rescue LoadError
-end unless defined?( RUBY_ENGINE ) and RUBY_ENGINE == 'jruby'
+end unless jruby?
 
 # Setup helpers.
 
@@ -21,6 +25,10 @@ DATA_DIR = File.expand_path( "#{__FILE__}/../data" )
 SEQ_COUNT = Dir[ "#{DATA_DIR}/seq_*.rb" ].count
 
 class Bacon::Context
+
+  def database_config
+    jruby? ? 'jruby.yml' : 'db.yml'
+  end
 
   def data( name )
     "#{DATA_DIR}/#{name}"

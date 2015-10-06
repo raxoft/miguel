@@ -88,7 +88,7 @@ describe Miguel::Command do
 
   should 'show changes needed to migrate from one schema to another' do
     with_tempfile( nil, 'db' ) do |path|
-      schema = "sqlite://#{path}"
+      schema = jruby? ? "jdbc:sqlite:#{path}" : "sqlite://#{path}"
       SEQ_COUNT.times do |i|
         new_schema = data( "seq_#{i}.rb" )
         out = test( 'diff', '-m', 'full', schema, new_schema )
@@ -99,47 +99,47 @@ describe Miguel::Command do
   end
 
   should 'apply schema to the database' do
-    test( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ), '--force' ).should.not.be.empty
-    test( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ), '--force' ).should.match /\ANo changes are necessary\.\Z/
+    test( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ), '--force' ).should.not.be.empty
+    test( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ), '--force' ).should.match /\ANo changes are necessary\.\Z/
   end
 
   should 'be able to clear the entire database' do
-    test( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ), '--force' )
-    test( 'clear', '--env', 'mysql', data( 'db.yml' ), '--force' ).should.not.be.empty
-    test( 'clear', '--env', 'mysql', data( 'db.yml' ), '--force' ).should.match /\ANo changes are necessary\.\Z/
+    test( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ), '--force' )
+    test( 'clear', '--env', 'mysql', data( database_config ), '--force' ).should.not.be.empty
+    test( 'clear', '--env', 'mysql', data( database_config ), '--force' ).should.match /\ANo changes are necessary\.\Z/
   end
 
   should 'require confirmation before changing the database' do
-    out, err = run( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ) )
+    out, err = run( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ) )
     out.should.match /^Confirm \(yes or no\)\?/
     err.should.match /\AOK, aborting\.\Z/
 
-    out, err = run( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ) ) do |input|
+    out, err = run( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ) ) do |input|
       input.write 'blah'
     end
     out.should.match /^Confirm \(yes or no\)\?/
     out.should.match /Please answer 'yes' or 'no'\.$/
     err.should.match /\AOK, aborting\.\Z/
 
-    out, err = run( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ) ) do |input|
+    out, err = run( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ) ) do |input|
       input.write 'no'
     end
     out.should.match /^Confirm \(yes or no\)\?/
     out.should.not.match /Please answer 'yes' or 'no'\.$/
     err.should.match /\AOK, aborting\.\Z/
 
-    out, err = run( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ) ) do |input|
+    out, err = run( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ) ) do |input|
       input.write 'yes'
     end
     out.should.match /^Confirm \(yes or no\)\?/
     out.should.match /OK, those changes were applied\./
     err.should.be.empty
 
-    out, err = run( 'clear', '--env', 'mysql', data( 'db.yml' ) )
+    out, err = run( 'clear', '--env', 'mysql', data( database_config ) )
     out.should.match /^Confirm \(yes or no\)\?/
     err.should.match /\AOK, aborting\.\Z/
 
-    out, err = run( 'clear', '--env', 'mysql', data( 'db.yml' ) ) do |input|
+    out, err = run( 'clear', '--env', 'mysql', data( database_config ) ) do |input|
       input.write 'yes'
     end
     out.should.match /^Confirm \(yes or no\)\?/
@@ -148,19 +148,19 @@ describe Miguel::Command do
   end
 
   should 'show no changes when told so' do
-    test( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ), '--force', '--quiet' ).should.be.empty
-    test( 'apply', '--env', 'mysql', data( 'db.yml' ), data( 'schema.rb' ), '--force', '--quiet' ).should.be.empty
-    test( 'clear', '--env', 'mysql', data( 'db.yml' ), '--force', '--quiet' ).should.be.empty
-    test( 'clear', '--env', 'mysql', data( 'db.yml' ), '--force', '--quiet' ).should.be.empty
+    test( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ), '--force', '--quiet' ).should.be.empty
+    test( 'apply', '--env', 'mysql', data( database_config ), data( 'schema.rb' ), '--force', '--quiet' ).should.be.empty
+    test( 'clear', '--env', 'mysql', data( database_config ), '--force', '--quiet' ).should.be.empty
+    test( 'clear', '--env', 'mysql', data( database_config ), '--force', '--quiet' ).should.be.empty
   end
 
   should 'log SQL commands to stdout when requested' do
-    test( 'show', '--env', 'mysql', data( 'db.yml' ), '--echo' ).should.match /SHOW FULL TABLES/
+    test( 'show', '--env', 'mysql', data( database_config ), '--echo' ).should.match /SHOW FULL TABLES/
   end
 
   should 'log SQL commands to given file when requested' do
     with_tempfile do |path|
-      test( 'show', '--env', 'mysql', data( 'db.yml' ), '--log', path )
+      test( 'show', '--env', 'mysql', data( database_config ), '--log', path )
       File.read( path ).should.match /SHOW FULL TABLES/
     end
   end

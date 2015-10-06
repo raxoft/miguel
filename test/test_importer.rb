@@ -38,7 +38,7 @@ describe Miguel::Importer do
   end
 
   def databases
-    YAML.load_file( data( 'db.yml' ) ).map do |env, config|
+    YAML.load_file( data( database_config ) ).map do |env, config|
       Sequel.connect( config )
     end
   end

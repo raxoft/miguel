@@ -4,7 +4,7 @@ require File.expand_path( '../lib/miguel/version', __FILE__ )
 
 Gem::Specification.new do |s|
   s.name        = 'miguel'
-  s.version     = Miguel::VERSION + '.pre7'
+  s.version     = Miguel::VERSION
   s.summary     = 'Database migrator and migration generator for Sequel.'
   s.description = <<EOT
 This gem makes it easy to create and maintain an up-to-date database schema

@@ -36,46 +36,48 @@ module Miguel
       end
     end
 
-    # Convert given database type to type and optional options used by our schema definitions.
-    # The ruby type provided serves as a hint of what Sequel's idea of the type is.
-    def revert_type_literal_internal( type, ruby_type )
-
-      return :boolean, :default_size => 1 if ruby_type == :boolean
-
-      case db.database_type
-      when :mysql
-        case type
-        when /\Aint\(\d+\)\z/
-          return :integer, :default_size => 11
-        when /\Aint\(\d+\) unsigned\z/
-          return :integer, :unsigned => true, :default_size => 10
-        when /\Abigint\(\d+\)\z/
-          return :bigint, :default_size => 20
-        when /\Adecimal\(\d+,\d+\)\z/
-          return :decimal, :default_size => [ 10, 0 ]
-        when /\A(enum|set)\((.*)\)\z/
-          return $1.to_sym, :elements => parse_elements( $2 )
-        end
-      when :sqlite
-        case type
-        when /\Ainteger UNSIGNED\z/
-          return :integer, :unsigned => true
-        end
-      when :postgres
-        case type
-        when /\Acharacter varying/
-          return :String, :default_size => 255
-        when /\Acharacter/
-          return :String, :fixed => true, :default_size => 255
-        when /\Atext\z/
-          return :String, :text => true
-        when /\Abytea\z/
-          return :blob
-        when /\Atimestamp/
-          return :timestamp
-        end
+    # Convert given MySQL database type to type and optional options used by our schema definitions.
+    def revert_mysql_type( type )
+      case type
+      when /\Aint\(\d+\)\z/
+        return :integer, :default_size => 11
+      when /\Aint\(\d+\) unsigned\z/
+        return :integer, :unsigned => true, :default_size => 10
+      when /\Abigint\(\d+\)\z/
+        return :bigint, :default_size => 20
+      when /\Adecimal\(\d+,\d+\)\z/
+        return :decimal, :default_size => [ 10, 0 ]
+      when /\A(enum|set)\((.*)\)\z/
+        return $1.to_sym, :elements => parse_elements( $2 )
       end
+    end
 
+    # Convert given SQLite database type to type and optional options used by our schema definitions.
+    def revert_sqlite_type( type )
+      case type
+      when /\Ainteger UNSIGNED\z/
+        return :integer, :unsigned => true
+      end
+    end
+
+    # Convert given Postgres database type to type and optional options used by our schema definitions.
+    def revert_postgres_type( type )
+      case type
+      when /\Acharacter varying/
+        return :String, :default_size => 255
+      when /\Acharacter/
+        return :String, :fixed => true, :default_size => 255
+      when /\Atext\z/
+        return :String, :text => true
+      when /\Abytea\z/
+        return :blob
+      when /\Atimestamp/
+        return :timestamp
+      end
+    end
+
+    # Convert given generic database type to type and optional options used by our schema definitions.
+    def revert_generic_type( type )
       case type
       when /\Avarchar/
         return :String, :default_size => 255
@@ -88,8 +90,17 @@ module Miguel
       when /\A\w+\z/
         return type.to_sym
       end
+    end
 
-      ruby_type
+    # Convert given database type to type and optional options used by our schema definitions.
+    # The ruby type provided serves as a hint of what Sequel's idea of the type is.
+    def revert_type_literal_internal( type, ruby_type )
+      return :boolean, :default_size => 1 if ruby_type == :boolean
+
+      method = "revert_#{db.database_type}_type"
+      specific_type = send( method, type ) if respond_to?( method, true )
+
+      specific_type || revert_generic_type( type ) || ruby_type
     end
 
     # Convert given database type to type and optional options used by our schema definitions.

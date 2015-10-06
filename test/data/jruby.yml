@@ -1,12 +1,12 @@
 # Database configuration for JRuby.
 
 development:
-  url: jdbc:sqlite::memory:
+  url: 'jdbc:sqlite::memory:'
 
 mysql:
-  url: jdbc:mysql://localhost/miguel_test?user=travis&password=
+  url: 'jdbc:mysql://localhost/miguel_test?user=travis&password='
 
 postgres:
-  url: jdbc:postgresql://localhost/miguel_test?user=postgres
+  url: 'jdbc:postgresql://localhost/miguel_test?user=postgres'
 
 # EOF #

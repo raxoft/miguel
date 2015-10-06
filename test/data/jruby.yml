@@ -1,12 +1,15 @@
 # Database configuration for JRuby.
 
 development:
+  adapter: jdbc
   url: 'jdbc:sqlite::memory:'
 
 mysql:
+  adapter: jdbc
   url: 'jdbc:mysql://localhost/miguel_test?user=travis&password='
 
 postgres:
+  adapter: jdbc
   url: 'jdbc:postgresql://localhost/miguel_test?user=postgres'
 
 # EOF #

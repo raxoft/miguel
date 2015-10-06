@@ -102,36 +102,48 @@ module Miguel
     # Execute the command itself.
     def execute( args )
       command = args.shift or fail "Missing command, use -h to see usage."
-      case command
-      when 'show'
-        check_args( args, 1 )
-        schema = get_schema( args.shift )
-        print schema.dump
-      when 'dump'
-        check_args( args, 1 )
-        schema = get_schema( args.shift )
-        show_changes( Schema.new, schema )
-      when 'down'
-        check_args( args, 1 )
-        schema = get_schema( args.shift )
-        show_changes( schema, Schema.new )
-      when 'diff'
-        check_args( args, 2 )
-        old_schema = get_schema( args.shift )
-        new_schema = get_schema( args.shift )
-        show_changes( old_schema, new_schema )
-      when 'apply'
-        check_args( args, 2 )
-        db = get_db( args.shift )
-        schema = get_schema( args.shift )
-        apply_schema( db, schema )
-      when 'clear'
-        check_args( args, 1 )
-        db = get_db( args.shift )
-        apply_schema( db, Schema.new )
-      else
-        fail "Invalid command, use -h to see usage."
-      end
+      method = "execute_#{command}"
+      fail "Invalid command, use -h to see usage." unless respond_to?( method, true )
+      check_args( args, method( method ).arity )
+      send( method, *args )
+    end
+
+    # Execute the show command.
+    def execute_show( name )
+      schema = get_schema( name )
+      print schema.dump
+    end
+
+    # Execute the dump command.
+    def execute_dump( name )
+      schema = get_schema( name )
+      show_changes( Schema.new, schema )
+    end
+
+    # Execute the down command.
+    def execute_down( name )
+      schema = get_schema( name )
+      show_changes( schema, Schema.new )
+    end
+
+    # Execute the diff command.
+    def execute_diff( old_name, new_name )
+      old_schema = get_schema( old_name )
+      new_schema = get_schema( new_name )
+      show_changes( old_schema, new_schema )
+    end
+
+    # Execute the apply command.
+    def execute_apply( db_name, name )
+      db = get_db( db_name )
+      schema = get_schema( name )
+      apply_schema( db, schema )
+    end
+
+    # Execute the clear command.
+    def execute_clear( db_name )
+      db = get_db( db_name )
+      apply_schema( db, Schema.new )
     end
 
     # Make sure the argument count is as expected.

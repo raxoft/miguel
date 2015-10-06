@@ -165,7 +165,7 @@ module Miguel
       elsif File.exist?( name )
         config = load_db_config( name )
         Sequel.connect( config )
-      elsif name =~ /:\/\//
+      elsif name =~ /:/
         Sequel.connect( name )
       else
         fail "Database config #{name} not found."

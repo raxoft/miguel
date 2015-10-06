@@ -3,16 +3,16 @@
 # Test coverage if enabled.
 
 if ENV[ 'COVERAGE' ]
-  require "simplecov"
+  require 'simplecov'
   SimpleCov.start
 end
 
 begin
-  require "codeclimate-test-reporter"
+  require 'codeclimate-test-reporter'
   CodeClimate::TestReporter.start
-  ENV[ 'COVERAGE' ] = "on"
+  ENV[ 'COVERAGE' ] = 'on'
 rescue LoadError
-end
+end unless defined?( RUBY_ENGINE ) and RUBY_ENGINE == 'jruby'
 
 # Setup helpers.
 

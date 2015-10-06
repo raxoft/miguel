@@ -31,9 +31,16 @@ describe Miguel::Command do
     f.unlink
   end
 
+  def sequence_number
+    @sequence_number = @sequence_number.to_i + 1
+  end
+
   def run( *args )
+    if ENV[ 'COVERAGE' ]
+      coverage = %w[ -r ./test/coverage ]
+      ENV[ 'COVERAGE_COMMAND_NAME' ] = "Command Test ##{sequence_number}"
+    end
     out = err = nil
-    coverage = %w[ -r ./test/coverage ] if ENV[ 'COVERAGE' ]
     Open3.popen3( 'ruby', *coverage, 'bin/miguel', *args ) do |i, o, e, t|
       yield i if block_given?
       i.close

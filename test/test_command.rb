@@ -19,7 +19,7 @@ describe Miguel::Command do
   end
 
   def with_tempfile( content = nil, extension = 'rb' )
-    f = Tempfile.new( [ 'miguel', ".#{extension}" ] )
+    f = Tempfile.new( [ 'miguel', "-#{content ? content.hash : 'new'}.#{extension}" ] )
     if content
       f.write( content )
       f.flush
@@ -33,7 +33,8 @@ describe Miguel::Command do
 
   def run( *args )
     out = err = nil
-    Open3.popen3( 'ruby', 'bin/miguel', *args ) do |i, o, e, t|
+    coverage = %w[ -r ./test/coverage ] if ENV[ 'COVERAGE' ]
+    Open3.popen3( 'ruby', *coverage, 'bin/miguel', *args ) do |i, o, e, t|
       yield i if block_given?
       i.close
       out = o.read

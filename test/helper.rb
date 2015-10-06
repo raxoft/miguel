@@ -2,9 +2,15 @@
 
 # Test coverage if enabled.
 
+if ENV[ 'COVERAGE' ]
+  require "simplecov"
+  SimpleCov.start
+end
+
 begin
   require "codeclimate-test-reporter"
   CodeClimate::TestReporter.start
+  ENV[ 'COVERAGE' ] = "on"
 rescue LoadError
 end
 

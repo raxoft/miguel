@@ -13,7 +13,7 @@ EOT
 
   s.author      = 'Patrik Rak'
   s.email       = 'patrik@raxoft.cz'
-  s.homepage    = 'http://rubygems.org/gems/miguel'
+  s.homepage    = 'https://github.com/raxoft/miguel'
   s.license     = 'MIT'
 
   s.files       = `git ls-files`.split( "\n" )

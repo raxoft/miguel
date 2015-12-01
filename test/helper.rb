@@ -35,7 +35,7 @@ class Bacon::Context
   end
 
   def lines( s )
-    s.to_s.lines.map.with_index{ |l, i| "#{i}:#{l.strip}" }
+    s.to_s.lines.map.with_index{ |l, i| "#{i}:#{l.strip}" } << :EOF
   end
 
   def match( a, b )

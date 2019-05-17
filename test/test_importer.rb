@@ -15,6 +15,10 @@ describe Miguel::Importer do
         {},
         { unsigned_keys: true },
         { mysql_timestamps: true },
+        { mysql_timestamps: true, zero_timestamps: true },
+        { mysql_timestamps: true, zero_timestamps: false },
+        { zero_timestamps: true },
+        { zero_timestamps: false },
       ]
     when :postgres
       [ signed_unsigned: true ]

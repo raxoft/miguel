@@ -139,6 +139,8 @@ Finally, the `timestamps` helper can be used to create the
 If you pass the `mysql_timestamps: true` option to `define`,
 the `update_time` timestamp will have the MySQL auto-update feature enabled,
 and timestamps will use the `'0000-00-00 00:00:00'` default by default.
+The latter can be also enabled and disabled explicitly by setting
+the `zero_timestamps` option to `true` or `false`, respectively.
 
 ## Using the command
 
@@ -208,7 +210,7 @@ and adjust the schema description accordingly.
 
 ## Credits
 
-Copyright &copy; 2015 Patrik Rak
+Copyright &copy; 2015-2019 Patrik Rak
 
 Miguel is released under the MIT license.
 

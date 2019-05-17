@@ -229,6 +229,65 @@ describe Miguel::Schema do
     end
   end
 
+  should 'control zero timestamps explicitly' do
+    match_schema <<-EOT, zero_timestamps: false do
+      table :timestamps do
+        timestamp :t1, :null => false, :default => "2000-01-01 00:00:00"
+        timestamp :t2, :null => true, :default => nil
+        timestamp :create_time, :null => false, :default => "2000-01-01 00:00:00"
+        timestamp :update_time, :null => false, :default => "2000-01-01 00:00:00"
+      end
+    EOT
+      table :timestamps do
+        Time :t1
+        Time? :t2
+        timestamps
+      end
+    end
+    match_schema <<-EOT, zero_timestamps: true do
+      table :timestamps do
+        timestamp :t1, :null => false, :default => "0000-00-00 00:00:00"
+        timestamp :t2, :null => true, :default => nil
+        timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
+        timestamp :update_time, :null => false, :default => "0000-00-00 00:00:00"
+      end
+    EOT
+      table :timestamps do
+        Time :t1
+        Time? :t2
+        timestamps
+      end
+    end
+    match_schema <<-EOT, mysql_timestamps: true, zero_timestamps: true do
+      table :timestamps do
+        timestamp :t1, :null => false, :default => "0000-00-00 00:00:00"
+        timestamp :t2, :null => true, :default => nil
+        timestamp :create_time, :null => false, :default => "0000-00-00 00:00:00"
+        timestamp :update_time, :null => false, :default => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+      end
+    EOT
+      table :timestamps do
+        Time :t1
+        Time? :t2
+        timestamps
+      end
+    end
+    match_schema <<-EOT, mysql_timestamps: true, zero_timestamps: false do
+      table :timestamps do
+        timestamp :t1, :null => false, :default => "2000-01-01 00:00:00"
+        timestamp :t2, :null => true, :default => nil
+        timestamp :create_time, :null => false, :default => "2000-01-01 00:00:00"
+        timestamp :update_time, :null => false, :default => Sequel.lit("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+      end
+    EOT
+      table :timestamps do
+        Time :t1
+        Time? :t2
+        timestamps
+      end
+    end
+  end
+
   should 'support auto-incrementing primary keys' do
     match_schema <<-EOT do
       table :pk do

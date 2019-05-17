@@ -76,6 +76,11 @@ Miguel::Schema.define( use_defaults: false ) do
     index :user_id
   end
 
+  table :bigint do
+    primary_key :id, type: :bigint
+    foreign_key :bigint_id, :bigint, type: :bigint
+  end if mysql
+
   table :reuse do
     primary_key :user_id
     foreign_key [:user_id], :users

@@ -45,6 +45,8 @@ module Miguel
         return :integer, :unsigned => true, :default_size => 10
       when /\Abigint\(\d+\)\z/
         return :bigint, :default_size => 20
+      when /\Abigint\(\d+\) unsigned\z/
+        return :bigint, :unsigned => true, :default_size => 20
       when /\Adecimal\(\d+,\d+\)\z/
         return :decimal, :default_size => [ 10, 0 ]
       when /\A(enum|set)\((.*)\)\z/

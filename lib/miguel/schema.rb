@@ -158,7 +158,7 @@ module Miguel
       # Default options implied for certain types.
       DEFAULT_OPTS = {
         :string => { :size => 255, :text => false },
-        :bigint => { :size => 20 },
+        :bigint => { :size => 20, :unsigned => false },
         :decimal => { :size => [ 10, 0 ] },
         :integer => { :unsigned => false },
         :time => { :only_time => true },
@@ -371,9 +371,9 @@ module Miguel
       end
 
       # Add foreign key definition.
-      def add_foreign_key( columns, table_name, *args )
-        add_column( :integer, columns, *args ) unless columns.is_a? Array
-        @foreign_keys << ForeignKey.new( columns, table_name, *args )
+      def add_foreign_key( columns, table_name, opts = {} )
+        add_column( opts[:type] || :integer, columns, opts ) unless columns.is_a? Array
+        @foreign_keys << ForeignKey.new( columns, table_name, opts )
       end
 
       # Add definition of column, index or foreign key.

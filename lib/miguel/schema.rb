@@ -302,7 +302,7 @@ module Miguel
 
         # The +method_missing+ doesn't take care of constant like methods (like String :name),
         # so those have to be defined explicitly for each such supported type.
-        for type in Sequel::Schema::Generator::GENERIC_TYPES
+        for type in (defined?(Sequel::Schema::CreateTableGenerator) ? Sequel::Schema::CreateTableGenerator::GENERIC_TYPES : Sequel::Schema::Generator::GENERIC_TYPES)
           class_eval( "def #{type}(*args) ; @table.add_definition(:#{type},*args) ; end", __FILE__, __LINE__ )
         end
 

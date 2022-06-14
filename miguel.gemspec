@@ -21,7 +21,9 @@ EOT
 
   s.required_ruby_version = '>= 1.9.3'
   s.add_runtime_dependency 'sequel', '~> 4.27'
+  s.add_development_dependency 'rake', '~> 13.0'
   s.add_development_dependency 'bacon', '~> 1.2'
+  s.add_development_dependency 'simplecov', '~> 0.21'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'mysql2'
   s.add_development_dependency 'pg'

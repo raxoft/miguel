@@ -1,5 +1,7 @@
 *~
+Gemfile.lock
 /miguel-*.gem
+/bundler
 /coverage
 /doc
 /.yardoc

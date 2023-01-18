@@ -142,6 +142,8 @@ module Miguel
       default = ruby_default unless ruby_default.nil?
 
       case default
+      when /'(.*?)'::integer/
+        return $1.to_i
       when nil, String, Numeric, TrueClass, FalseClass
         return default
       when DateTime

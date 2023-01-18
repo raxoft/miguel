@@ -133,7 +133,7 @@ module Miguel
     def revert_default( type, default, ruby_default )
       if type.to_s =~ /date|time/
         case default
-        when 'CURRENT_TIMESTAMP'
+        when /CURRENT_TIMESTAMP/i
           # This matches our use of MySQL timestamps in schema definitions.
           return Sequel.lit('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
         end

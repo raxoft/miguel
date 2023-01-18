@@ -1,5 +1,8 @@
 # Test helper.
 
+require 'bundler/setup'
+require 'bacon'
+
 # Test coverage if enabled.
 
 def jruby?

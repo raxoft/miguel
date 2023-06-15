@@ -68,6 +68,7 @@ table :compound do
   index [:a, :c], :null => false, :unique => true
   index [:b, :c, :d], :null => false
   index [:b, :a], :null => false
+  index [:c, :d], :null => false, :name => :named_cd_index
   foreign_key [:b, :a], :compound, :null => false, :key => [:a, :b], :unsigned => false
 end
 table :null do

@@ -14,7 +14,7 @@ Sequel.migration do
       add_column :create_time, :timestamp, :default => "2000-01-01 00:00:00", :null => false
       add_column :update_time, :timestamp, :default => "2000-01-01 00:00:00", :null => false
       add_column :fk, :integer, :default => 0, :null => false, :key => [:id], :unsigned => false
-      add_index [:u], :unique => true
+      add_index [:u], :unique => true, :name => :b_u_index
     end
     create_table :c do
       primary_key :id, :null => false, :unsigned => false
@@ -46,7 +46,7 @@ Sequel.migration do
       set_column_type :a, Integer, :null => false
     end
     alter_table :b do
-      drop_index [:u] # :unique => true
+      drop_index [:u] # :unique => true, :name => :b_u_index
       drop_column :create_time # :timestamp, :null => false, :default => "2000-01-01 00:00:00"
       drop_column :update_time # :timestamp, :null => false, :default => "2000-01-01 00:00:00"
       drop_column :fk # :integer, :null => false, :key => [:id], :unsigned => false

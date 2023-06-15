@@ -96,6 +96,7 @@ Miguel::Schema.define( use_defaults: false ) do
     unique [:a, :c]
     index [:b, :c, :d]
     index [:b, :a]
+    index [:c, :d], name: :named_cd_index
   end
 
   table :null do

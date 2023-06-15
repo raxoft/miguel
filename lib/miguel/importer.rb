@@ -160,6 +160,7 @@ module Miguel
       foreign_key_indexes = table.foreign_keys.map{ |x| x.columns if x.columns.size == 1 }.compact
       for name, opts in db.indexes( table.name )
         opts = opts.dup
+        opts[ :name ] = name
         columns = opts.delete( :columns )
         next if ( ! opts[ :unique ] ) && foreign_key_indexes.include?( columns ) && name == columns.first
         opts.delete( :deferrable ) unless opts[ :deferrable ]

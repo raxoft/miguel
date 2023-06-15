@@ -4,7 +4,7 @@ Sequel.migration do
       drop_foreign_key [:fk] # :a, :on_update => :no_action, :on_delete => :no_action, :key => [:id]
     end
     alter_table :b do
-      add_index [:create_time], :unique => false
+      add_index [:create_time], :unique => false, :name => :b_create_time_index
     end
     alter_table :c do
       add_column :t, String, :default => "", :null => false, :text => true
@@ -36,7 +36,7 @@ Sequel.migration do
     end
     drop_table :a_b
     alter_table :b do
-      drop_index [:create_time] # :unique => false
+      drop_index [:create_time] # :unique => false, :name => :b_create_time_index
     end
     alter_table :c do
       drop_column :t # String, :null => false, :text => true

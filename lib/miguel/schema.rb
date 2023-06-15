@@ -204,11 +204,15 @@ module Miguel
 
       include Output
 
+      # The table this index belongs to.
+      attr_reader :table
+
       # Index column(s) and options.
       attr_reader :columns, :opts
 
       # Create new index for given column(s).
-      def initialize( columns, opts = {} )
+      def initialize( table, columns, opts = {} )
+        @table = table
         @columns = [ *columns ]
         @opts = opts
       end
@@ -218,9 +222,14 @@ module Miguel
 
       # Get the index options, in a canonic way.
       def canonic_opts
-        o = { :unique => false }
+        o = { :unique => false, :name => default_index_name }
         o.merge!( opts )
         o.delete_if{ |key, value| IGNORED_OPTS.include? key }
+      end
+
+      # Get default index name for this index.
+      def default_index_name
+        [ table.name, *columns, :index ].join( '_' ).to_sym
       end
 
       # Compare one index with another one.
@@ -367,7 +376,7 @@ module Miguel
 
       # Add index definition.
       def add_index( columns, *args )
-        @indexes << Index.new( columns, *args )
+        @indexes << Index.new( self, columns, *args )
       end
 
       # Add foreign key definition.

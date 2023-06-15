@@ -123,6 +123,7 @@ set_defaults :Time, :timestamp, default: '2000-01-01 00:00:00'
 set_defaults :Time?, :timestamp, default: nil
 
 set_defaults :unique, :index, unique: true
+set_defaults :fulltext, :index, type: :full_text
 
 set_defaults :Key, :integer, unsigned: false
 set_defaults :primary_key, type: :integer, unsigned: false

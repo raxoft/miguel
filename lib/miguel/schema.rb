@@ -538,6 +538,7 @@ module Miguel
     #   :Time?, :timestamp, :default => nil
     #
     #   :unique, :index, :unique => true
+    #   :fulltext, :index, :type => :full_text
     #
     #   :Key, :integer, :unsigned => false
     #   :primary_key, :type => :integer, :unsigned => false
@@ -569,9 +570,12 @@ module Miguel
         opts[ :type ] ||= :integer unless args.first.is_a? Array or not opts[ :unsigned ]
       end
 
-      # Save some typing for unique indexes.
+      # Save some typing for unique and fulltext indexes.
 
       set_defaults :unique, :index, :unique => true
+      set_defaults :fulltext, :index, :type => :full_text do |opts,args,table|
+        opts[ :name ] ||= [ table, *args, :fulltext ].join( '_' ).to_sym
+      end
 
       # Type shortcuts we use frequently.
 

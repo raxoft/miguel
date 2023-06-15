@@ -21,9 +21,9 @@ describe Miguel::Importer do
         { zero_timestamps: false },
       ]
     when :postgres
-      [ signed_unsigned: true ]
+      [ signed_unsigned: true, skip_fulltext: true ]
     else
-      [ {} ]
+      [ skip_fulltext: true ]
     end
   end
 

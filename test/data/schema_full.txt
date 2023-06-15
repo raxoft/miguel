@@ -70,6 +70,12 @@ Sequel.migration do
       index [:b, :a], :null => false
       index [:c, :d], :null => false, :name => :named_cd_index
     end
+    create_table :fulltext do
+      String :s, :null => false, :text => false
+      String :t, :null => false, :text => true
+      index [:s], :null => false, :type => :full_text, :name => :fulltext_s_fulltext
+      index [:s, :t], :null => false, :type => :full_text, :name => :fulltext_s_t_fulltext
+    end
     create_table :null do
       String :string, :null => true, :text => false
       String :text, :null => true, :text => true
@@ -158,6 +164,7 @@ Sequel.migration do
     drop_table :simple
     drop_table :reuse
     drop_table :compound
+    drop_table :fulltext
     drop_table :null
     drop_table :defaults
     drop_table :simple_users

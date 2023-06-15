@@ -71,6 +71,12 @@ table :compound do
   index [:c, :d], :null => false, :name => :named_cd_index
   foreign_key [:b, :a], :compound, :null => false, :key => [:a, :b], :unsigned => false
 end
+table :fulltext do
+  String :s, :null => false, :text => false
+  String :t, :null => false, :text => true
+  index [:s], :null => false, :type => :full_text, :name => :fulltext_s_fulltext
+  index [:s, :t], :null => false, :type => :full_text, :name => :fulltext_s_t_fulltext
+end
 table :null do
   String :string, :null => true, :text => false
   String :text, :null => true, :text => true

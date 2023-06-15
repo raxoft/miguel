@@ -26,6 +26,7 @@ drop_table :users
 drop_table :simple
 drop_table :reuse
 drop_table :compound
+drop_table :fulltext
 drop_table :null
 drop_table :defaults
 drop_table :simple_users

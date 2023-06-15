@@ -99,6 +99,13 @@ Miguel::Schema.define( use_defaults: false ) do
     index [:c, :d], name: :named_cd_index
   end
 
+  table :fulltext do
+    String :s
+    Text :t
+    fulltext :s
+    fulltext [:s, :t]
+  end unless opts[ :skip_fulltext ]
+
   table :null do
     String? :string
     Text? :text

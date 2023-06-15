@@ -430,20 +430,26 @@ describe Miguel::Schema do
         Integer :a, :null => false
         Integer :b, :null => false
         String :s, :null => false, :text => false
+        String :t, :null => false, :text => true
         index [:a], :null => false
         index [:b], :null => false, :unique => true
         index [:a, :b], :null => false
         index [:a, :b, :c], :null => false, :unique => true
+        index [:s], :null => false, :type => :full_text, :name => :index_s_fulltext
+        index [:s, :t], :null => false, :type => :full_text, :name => :index_s_t_fulltext
       end
     EOT
       table :index do
         Integer :a
         Integer :b
         String :s
+        Text :t
         index :a
         unique :b
         index [:a, :b]
         unique [:a, :b, :c]
+        fulltext :s
+        fulltext [:s, :t]
       end
     end
   end

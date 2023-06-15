@@ -163,6 +163,8 @@ module Miguel
         opts[ :name ] = name
         columns = opts.delete( :columns )
         next if ( ! opts[ :unique ] ) && foreign_key_indexes.include?( columns ) && name == columns.first
+        # Sequel currently doesn't provide info about fulltext indexes, so we have to rely on properly used names.
+        opts[ :type ] = :full_text if name =~ /_fulltext$/
         opts.delete( :deferrable ) unless opts[ :deferrable ]
         table.add_index( columns, opts )
       end
